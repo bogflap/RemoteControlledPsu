@@ -1,1 +1,1 @@
-# RemoteControlledPsu
+Command line project to remote control a Tenma 72-2710 power supply unit written in C++ using QtCreator. Thank you to Jordi Castells and his Python based tenma-serial project for providing plenty of ideas and guidance.
