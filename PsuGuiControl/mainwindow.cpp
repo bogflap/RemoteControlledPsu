@@ -35,6 +35,78 @@ void MainWindow::closeClicked(bool checked)
     Q_UNUSED(checked);
 }
 
+void MainWindow::resultSetOutputCurrent(QString errorString)
+{
+    Q_UNUSED(errorString);
+}
+
+void MainWindow::resultGetOutputCurrent(double_t current, QString errorString)
+{
+    Q_UNUSED(errorString);
+    Q_UNUSED(current);
+}
+
+void MainWindow::resultSetOutputVoltage(QString errorString)
+{
+    Q_UNUSED(errorString);
+}
+
+void MainWindow::resultGetOutputVoltage(double_t voltage, QString errorString)
+{
+    Q_UNUSED(errorString);
+    Q_UNUSED(voltage);
+}
+
+void MainWindow::resultGetActualOutputCurrent(double_t current, QString errorString)
+{
+    Q_UNUSED(errorString);
+    Q_UNUSED(current);
+}
+
+void MainWindow::resultGetActualOutputVoltage(double_t voltage, QString errorString)
+{
+    Q_UNUSED(errorString);
+    Q_UNUSED(voltage);
+}
+
+void MainWindow::resultGetOutputEnable(QString errorString)
+{
+    Q_UNUSED(errorString);
+}
+
+void MainWindow::resultGetStatus(QString status, QString errorString)
+{
+    Q_UNUSED(errorString);
+    Q_UNUSED(status);
+}
+
+void MainWindow::resultGetIdentification(QString identification, QString errorString)
+{
+    Q_UNUSED(errorString);
+    Q_UNUSED(identification);
+}
+
+void MainWindow::resultRecallPanelSetting(int number, QString errorString)
+{
+    Q_UNUSED(errorString);
+    Q_UNUSED(number);
+}
+
+void MainWindow::resultSavePanelSetting(QString errorString)
+{
+    Q_UNUSED(errorString);
+}
+
+void MainWindow::resultSetOverCurrentPrtotection(QString errorString)
+{
+    Q_UNUSED(errorString);
+}
+
+void MainWindow::resultSetKeyboardLock(QString errorString)
+{
+    Q_UNUSED(errorString);
+}
+
 void MainWindow::getSerialPorts()
 {
     Q_FOREACH(QSerialPortInfo port, QSerialPortInfo::availablePorts())
