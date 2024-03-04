@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>go-down.png</file>
+        <file>go-up.png</file>
+    </qresource>
+</RCC>
