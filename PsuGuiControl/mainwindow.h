@@ -42,6 +42,39 @@ private:
 private slots:
     void    openClicked(bool checked);
     void    closeClicked(bool checked);
+    void    quitClicked(bool checked);
+
+    void    enableOutputClicked(bool checked);
+
+    void    serialPortActivated(int index);
+
+    void    constantCurrentToggled(bool checked);
+    void    ampsTensUpClicked(bool checked);
+    void    ampsTensDownClicked(bool checked);
+    void    ampsOnesUpClicked(bool checked);
+    void    ampsOnesDownClicked(bool checked);
+    void    ampsTenthsUpClicked(bool checked);
+    void    ampsTenthsDownClicked(bool checked);
+    void    ampsHundrethsUpClicked(bool checked);
+    void    ampsHundrethsDownClicked(bool checked);
+    void    ampsThousandthsUpClicked(bool checked);
+    void    ampsThousandthsDownClicked(bool checked);
+    void    ampsApplyClicked(bool checked);
+    void    ampsResetClicked(bool checked);
+
+    void    constantVoltageToggled(bool checked);
+    void    voltsApplyClicked(bool checked);
+    void    voltsResetClicked(bool checked);
+    void    voltsTensUpClicked(bool checked);
+    void    voltsTensDownClicked(bool checked);
+    void    voltsOnesUpClicked(bool checked);
+    void    voltsOnesDownClicked(bool checked);
+    void    voltsTenthsUpClicked(bool checked);
+    void    voltsTenthsDownClicked(bool checked);
+    void    voltsHundrethsUpClicked(bool checked);
+    void    voltsHundrethsDownClicked(bool checked);
+    void    voltsThousandthsUpClicked(bool checked);
+    void    voltsThousandthsDownClicked(bool checked);
 
 // Slots for PSU thread results
 private slots:
