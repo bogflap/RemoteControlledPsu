@@ -1,3 +1,5 @@
+#include <QDebug>
+
 #include "psuThread.h"
 
 PsuThread::PsuThread(QObject *parent)
@@ -6,77 +8,79 @@ PsuThread::PsuThread(QObject *parent)
 
 }
 
-void PsuThread::openPort(QString port)
+void PsuThread::psuOpenPort(QString port)
 {
     Q_UNUSED(port);
+
+    qDebug() << "psuOpenPort";
 }
 
-void PsuThread::closePort()
+void PsuThread::psuClosePort()
 {
 
 }
 
-void PsuThread::setOutputCurrent(double_t current)
+void PsuThread::psuSetOutputCurrent(double_t current)
 {
     Q_UNUSED(current);
 }
 
-void PsuThread::getOutputCurrent()
+void PsuThread::psuGetOutputCurrent()
 {
 
 }
 
-void PsuThread::setOutputVoltage(double_t voltage)
+void PsuThread::psuSetOutputVoltage(double_t voltage)
 {
     Q_UNUSED(voltage);
 }
 
-void PsuThread::getOutputVoltage()
+void PsuThread::psuGetOutputVoltage()
 {
 
 }
 
-void PsuThread::getActualOutputCurrent()
+void PsuThread::psuGetActualOutputCurrent()
 {
 
 }
 
-void PsuThread::getActualOutputVoltage()
+void PsuThread::psuGetActualOutputVoltage()
 {
 
 }
 
-void PsuThread::setOutputEnable(bool enable)
-{
-    Q_UNUSED(enable);
-}
-
-void PsuThread::getStatus()
-{
-
-}
-
-void PsuThread::getIdentification()
-{
-
-}
-
-void PsuThread::recallPanelSetting(int number)
-{
-    Q_UNUSED(number);
-}
-
-void PsuThread::savePanelSetting(int number)
-{
-    Q_UNUSED(number);
-}
-
-void PsuThread::setOverCurrentPrtotection(bool enable)
+void PsuThread::psuSetOutputEnable(bool enable)
 {
     Q_UNUSED(enable);
 }
 
-void PsuThread::setKeyboardLock(bool enable)
+void PsuThread::psuGetStatus()
+{
+
+}
+
+void PsuThread::psuGetIdentification()
+{
+
+}
+
+void PsuThread::psuRecallPanelSetting(int number)
+{
+    Q_UNUSED(number);
+}
+
+void PsuThread::psuSavePanelSetting(int number)
+{
+    Q_UNUSED(number);
+}
+
+void PsuThread::psuSetOverCurrentPrtotection(bool enable)
+{
+    Q_UNUSED(enable);
+}
+
+void PsuThread::psuSetKeyboardLock(bool enable)
 {
     Q_UNUSED(enable);
 }

@@ -22,21 +22,21 @@ public:
 
 // PSU thread commands
 signals:
-    void    openPort(QString port);
-    void    closePort();
-    void    setOutputCurrent(double_t current);
-    void    getOutputCurrent();
-    void    setOutputVoltage(double_t voltage);
-    void    getOutputVoltage();
-    void    getActualOutputCurrent();
-    void    getActualOutputVoltage();
-    void    setOutputEnable(bool enable);
-    void    getStatus();
-    void    getIdentification();
-    void    recallPanelSetting(int number);
-    void    savePanelSetting(int number);
-    void    setOverCurrentPrtotection(bool enable);
-    void    setKeyboardLock(bool enable);
+    void    psuOpenPort(QString);
+    void    psuClosePort();
+    void    psuSetOutputCurrent(double_t);
+    void    psuGetOutputCurrent();
+    void    psuSetOutputVoltage(double_t);
+    void    psuGetOutputVoltage();
+    void    psuGetActualOutputCurrent();
+    void    psuGetActualOutputVoltage();
+    void    psuSetOutputEnable(bool);
+    void    psuGetStatus();
+    void    psuGetIdentification();
+    void    psuRecallPanelSetting(int);
+    void    psuSavePanelSetting(int);
+    void    psuSetOverCurrentPrtotection(bool);
+    void    psuSetKeyboardLock(bool);
 
 private:
     void    getSerialPorts();
@@ -44,63 +44,63 @@ private:
 
 // GUI slots
 private slots:
-    void    openClicked(bool checked);
-    void    closeClicked(bool checked);
-    void    quitClicked(bool checked);
+    void    openClicked(bool);
+    void    closeClicked(bool);
+    void    quitClicked(bool);
 
-    void    enableOutputClicked(bool checked);
+    void    enableOutputClicked(bool);
 
-    void    serialPortActivated(int index);
+    void    serialPortActivated(int);
 
-    void    constantCurrentToggled(bool checked);
-    void    ampsTensUpClicked(bool checked);
-    void    ampsTensDownClicked(bool checked);
-    void    ampsOnesUpClicked(bool checked);
-    void    ampsOnesDownClicked(bool checked);
-    void    ampsTenthsUpClicked(bool checked);
-    void    ampsTenthsDownClicked(bool checked);
-    void    ampsHundrethsUpClicked(bool checked);
-    void    ampsHundrethsDownClicked(bool checked);
-    void    ampsThousandthsUpClicked(bool checked);
-    void    ampsThousandthsDownClicked(bool checked);
-    void    ampsApplyClicked(bool checked);
-    void    ampsResetClicked(bool checked);
+    void    constantCurrentToggled(bool);
+    void    ampsTensUpClicked(bool);
+    void    ampsTensDownClicked(bool);
+    void    ampsOnesUpClicked(bool);
+    void    ampsOnesDownClicked(bool);
+    void    ampsTenthsUpClicked(bool);
+    void    ampsTenthsDownClicked(bool);
+    void    ampsHundrethsUpClicked(bool);
+    void    ampsHundrethsDownClicked(bool);
+    void    ampsThousandthsUpClicked(bool);
+    void    ampsThousandthsDownClicked(bool);
+    void    ampsApplyClicked(bool);
+    void    ampsResetClicked(bool);
 
-    void    constantVoltageToggled(bool checked);
-    void    voltsApplyClicked(bool checked);
-    void    voltsResetClicked(bool checked);
-    void    voltsTensUpClicked(bool checked);
-    void    voltsTensDownClicked(bool checked);
-    void    voltsOnesUpClicked(bool checked);
-    void    voltsOnesDownClicked(bool checked);
-    void    voltsTenthsUpClicked(bool checked);
-    void    voltsTenthsDownClicked(bool checked);
-    void    voltsHundrethsUpClicked(bool checked);
-    void    voltsHundrethsDownClicked(bool checked);
-    void    voltsThousandthsUpClicked(bool checked);
-    void    voltsThousandthsDownClicked(bool checked);
+    void    constantVoltageToggled(bool);
+    void    voltsApplyClicked(bool);
+    void    voltsResetClicked(bool);
+    void    voltsTensUpClicked(bool);
+    void    voltsTensDownClicked(bool);
+    void    voltsOnesUpClicked(bool);
+    void    voltsOnesDownClicked(bool);
+    void    voltsTenthsUpClicked(bool);
+    void    voltsTenthsDownClicked(bool);
+    void    voltsHundrethsUpClicked(bool);
+    void    voltsHundrethsDownClicked(bool);
+    void    voltsThousandthsUpClicked(bool);
+    void    voltsThousandthsDownClicked(bool);
 
 // Slots for PSU thread results
-private slots:
-    void    resultOpenPort(QString errorString);
-    void    resultClosePort(QString errorString);
-    void    resultSetOutputCurrent(QString errorString);
-    void    resultGetOutputCurrent(double_t current,QString errorString);
-    void    resultSetOutputVoltage(QString errorString);
-    void    resultGetOutputVoltage(double_t voltage, QString errorString);
-    void    resultGetActualOutputCurrent(double_t current, QString errorString);
-    void    resultGetActualOutputVoltage(double_t voltage, QString errorString);
-    void    resultGetOutputEnable(QString errorString);
-    void    resultGetStatus(QString status, QString errorString);
-    void    resultGetIdentification(QString identification, QString errorString);
-    void    resultRecallPanelSetting(int number, QString errorString);
-    void    resultSavePanelSetting(QString errorString);
-    void    resultSetOverCurrentPrtotection(QString errorString);
-    void    resultSetKeyboardLock(QString errorString);
+public slots:
+    void    resultOpenPort(QString);
+    void    resultClosePort(QString);
+    void    resultSetOutputCurrent(QString);
+    void    resultGetOutputCurrent(double_t,QString);
+    void    resultSetOutputVoltage(QString);
+    void    resultGetOutputVoltage(double_t, QString);
+    void    resultGetActualOutputCurrent(double_t, QString);
+    void    resultGetActualOutputVoltage(double_t, QString);
+    void    resultGetOutputEnable(QString);
+    void    resultGetStatus(QString status, QString);
+    void    resultGetIdentification(QString, QString);
+    void    resultRecallPanelSetting(int, QString);
+    void    resultSavePanelSetting(QString);
+    void    resultSetOverCurrentPrtotection(QString);
+    void    resultSetKeyboardLock(QString);
 
 private:
     Ui::MainWindow  *ui;
-    PsuThread       *pPsuThread;
-    QThread         psuThread;
+    PsuThread       psuThread;
+    QThread         tPsuThread;
 };
 #endif // MAINWINDOW_H
