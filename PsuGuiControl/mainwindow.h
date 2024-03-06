@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QThread>
 
+#include "psuThread.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -20,6 +22,8 @@ public:
 
 // PSU thread commands
 signals:
+    void    openPort(QString port);
+    void    closePort();
     void    setOutputCurrent(double_t current);
     void    getOutputCurrent();
     void    setOutputVoltage(double_t voltage);
@@ -78,6 +82,8 @@ private slots:
 
 // Slots for PSU thread results
 private slots:
+    void    resultOpenPort(QString errorString);
+    void    resultClosePort(QString errorString);
     void    resultSetOutputCurrent(QString errorString);
     void    resultGetOutputCurrent(double_t current,QString errorString);
     void    resultSetOutputVoltage(QString errorString);
@@ -93,7 +99,8 @@ private slots:
     void    resultSetKeyboardLock(QString errorString);
 
 private:
-    Ui::MainWindow *ui;
-    QThread psuThread;
+    Ui::MainWindow  *ui;
+    PsuThread       *pPsuThread;
+    QThread         psuThread;
 };
 #endif // MAINWINDOW_H
