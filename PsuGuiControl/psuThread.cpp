@@ -1,6 +1,9 @@
 #include <QDebug>
 
 #include "psuThread.h"
+#include "psucontol.h"
+
+PsuContol   gPsuControl;
 
 PsuThread::PsuThread(QObject *parent)
     : QObject{parent}
@@ -10,9 +13,12 @@ PsuThread::PsuThread(QObject *parent)
 
 void PsuThread::psuOpenPort(QString port)
 {
-    Q_UNUSED(port);
+    QString errorText = "";
 
-    qDebug() << "psuOpenPort";
+    gPsuControl.open(port);
+    gPsuControl.getError(errorText);
+
+    emit resultOpenPort(errorText);
 }
 
 void PsuThread::psuClosePort()

@@ -27,3 +27,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     Resources/resources.qrc
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../PsuContol/release/ -lPsuContol
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../PsuContol/debug/ -lPsuContol
+else:unix: LIBS += -L$$OUT_PWD/../PsuContol/ -lPsuContol
+
+INCLUDEPATH += $$PWD/../PsuContol
+DEPENDPATH += $$PWD/../PsuContol

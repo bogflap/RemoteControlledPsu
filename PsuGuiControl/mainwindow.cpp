@@ -33,8 +33,6 @@ void MainWindow::openClicked(bool checked)
 
     QString port;
 
-    qDebug() << "openClicked";
-
     port = ui->serialPort->currentText();
 
     emit psuOpenPort(port);
@@ -194,7 +192,7 @@ void MainWindow::voltsThousandthsDownClicked(bool checked)
 
 void MainWindow::resultOpenPort(QString errorString)
 {
-    Q_UNUSED(errorString);
+    showErrorText(errorString);
 }
 
 void MainWindow::resultClosePort(QString errorString)
@@ -272,6 +270,14 @@ void MainWindow::resultSetOverCurrentPrtotection(QString errorString)
 void MainWindow::resultSetKeyboardLock(QString errorString)
 {
     Q_UNUSED(errorString);
+}
+
+void MainWindow::showErrorText(QString text)
+{
+    if (text != "")
+    {
+        ui->statusbar->showMessage(text);
+    }
 }
 
 void MainWindow::getSerialPorts()

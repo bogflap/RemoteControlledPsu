@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QThread>
+#include <QLabel>
 
 #include "psuThread.h"
 
@@ -63,6 +64,7 @@ private slots:
     void    ampsHundrethsDownClicked(bool);
     void    ampsThousandthsUpClicked(bool);
     void    ampsThousandthsDownClicked(bool);
+
     void    ampsApplyClicked(bool);
     void    ampsResetClicked(bool);
 
@@ -82,6 +84,7 @@ private slots:
 
 // Slots for PSU thread results
 public slots:
+
     void    resultOpenPort(QString);
     void    resultClosePort(QString);
     void    resultSetOutputCurrent(QString);
@@ -97,6 +100,9 @@ public slots:
     void    resultSavePanelSetting(QString);
     void    resultSetOverCurrentPrtotection(QString);
     void    resultSetKeyboardLock(QString);
+
+private:
+    void    showErrorText(QString text);
 
 private:
     Ui::MainWindow  *ui;
