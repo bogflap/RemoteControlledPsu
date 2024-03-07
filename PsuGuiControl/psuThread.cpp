@@ -23,7 +23,19 @@ void PsuThread::psuOpenPort(QString port)
 
 void PsuThread::psuClosePort()
 {
+    QString errorText;
 
+    if (gPsuControl.getPortOpen())
+    {
+        errorText = "";
+        gPsuControl.close();
+    }
+    else
+    {
+        errorText = "Port not open";
+    }
+
+    emit resultClosePort(errorText);
 }
 
 void PsuThread::psuSetOutputCurrent(double_t current)

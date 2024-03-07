@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
                 &QObject::deleteLater);
     tPsuThread.start();
 
+    quitting = false;
+
     makeConnections();
     getSerialPorts();
 }
@@ -48,7 +50,10 @@ void MainWindow::closeClicked(bool checked)
 void MainWindow::quitClicked(bool checked)
 {
     Q_UNUSED(checked);
-}
+
+    quitting = true;
+
+    emit psuClosePort();}
 
 void MainWindow::enableOutputClicked(bool checked)
 {
@@ -198,6 +203,11 @@ void MainWindow::resultOpenPort(QString errorString)
 void MainWindow::resultClosePort(QString errorString)
 {
     Q_UNUSED(errorString);
+
+    if (quitting)
+    {
+        exit(0);
+    }
 }
 
 void MainWindow::resultSetOutputCurrent(QString errorString)
@@ -328,32 +338,32 @@ void MainWindow::makeConnections()
     connect(ui->voltsThousandthsDown, SIGNAL(clicked(bool)), this, SLOT(voltsThousandthsDownClicked(bool)));
 
 //    QObject::connect(this, &MainWindow::psuOpenPort, &psuThread, &PsuThread::psuOpenPort);
-    connect(this, SIGNAL(psuOpenPort(QString)), &psuThread, SLOT(psuOpenPort(QString)));
-    connect(this, SIGNAL(psuClosePort()), &psuThread, SLOT(psuClosePort()));
-    connect(this, SIGNAL(psuGetOutputCurrent()), &psuThread, SLOT(psuGetOutputCurrent()));
-    connect(this, SIGNAL(psuSetOutputVoltage(double_t)), &psuThread, SLOT(psuSetOutputVoltage(double_t)));
-    connect(this, SIGNAL(psuGetOutputVoltage()), &psuThread, SLOT(psuGetOutputVoltage()));
-    connect(this, SIGNAL(psuGetActualOutputCurrent()), &psuThread, SLOT(psuGetActualOutputCurrent()));
-    connect(this, SIGNAL(psuGetActualOutputVoltage()), &psuThread, SLOT(psuGetActualOutputVoltage()));
-    connect(this, SIGNAL(psuSetOutputEnable(bool)), &psuThread, SLOT(psuSetOutputEnable(bool)));
-    connect(this, SIGNAL(psuGetStatus()), &psuThread, SLOT(psuGetStatus()));
-    connect(this, SIGNAL(psuGetIdentification()), &psuThread, SLOT(psuGetIdentification()));
-    connect(this, SIGNAL(psuRecallPanelSetting(int)), &psuThread, SLOT(psuRecallPanelSetting(int)));
-    connect(this, SIGNAL(psuSavePanelSetting(int)), &psuThread, SLOT(psuSavePanelSetting(int)));
-    connect(this, SIGNAL(psuSetOverCurrentPrtotection(bool)), &psuThread, SLOT(psuSetOverCurrentPrtotection(bool)));
-    connect(this, SIGNAL(psuSetKeyboardLock(bool)), &psuThread, SLOT(psuSetKeyboardLock(bool)));
+    connect(this, SIGNAL(psuOpenPort(QString)), &psuThread, SLOT(psuOpenPort(QString)), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuClosePort()), &psuThread, SLOT(psuClosePort()), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuGetOutputCurrent()), &psuThread, SLOT(psuGetOutputCurrent()), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuSetOutputVoltage(double_t)), &psuThread, SLOT(psuSetOutputVoltage(double_t)), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuGetOutputVoltage()), &psuThread, SLOT(psuGetOutputVoltage()), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuGetActualOutputCurrent()), &psuThread, SLOT(psuGetActualOutputCurrent()), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuGetActualOutputVoltage()), &psuThread, SLOT(psuGetActualOutputVoltage()), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuSetOutputEnable(bool)), &psuThread, SLOT(psuSetOutputEnable(bool)), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuGetStatus()), &psuThread, SLOT(psuGetStatus()), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuGetIdentification()), &psuThread, SLOT(psuGetIdentification()), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuRecallPanelSetting(int)), &psuThread, SLOT(psuRecallPanelSetting(int)), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuSavePanelSetting(int)), &psuThread, SLOT(psuSavePanelSetting(int)), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuSetOverCurrentPrtotection(bool)), &psuThread, SLOT(psuSetOverCurrentPrtotection(bool)), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuSetKeyboardLock(bool)), &psuThread, SLOT(psuSetKeyboardLock(bool)), Qt::QueuedConnection);
 
-    connect(&psuThread, SIGNAL(resultOpenPort(QString)), this, SLOT(resultOpenPort(QString)));
-    connect(&psuThread, SIGNAL(resultClosePort(QString)), this, SLOT(resultClosePort(QString)));
-    connect(&psuThread, SIGNAL(resultSetOutputVoltage(QString)), this, SLOT(resultSetOutputVoltage(QString)));
-    connect(&psuThread, SIGNAL(resultGetOutputCurrent(double_t,QString)), this, SLOT(resultGetOutputCurrent(double_t,QString)));
-    connect(&psuThread, SIGNAL(resultGetActualOutputCurrent(double_t,QString)), this, SLOT(resultGetActualOutputCurrent(double_t,QString)));
-    connect(&psuThread, SIGNAL(resultGetActualOutputVoltage(double_t,QString)), this, SLOT(resultGetActualOutputVoltage(double_t,QString)));
-    connect(&psuThread, SIGNAL(resultGetOutputEnable(QString)), this, SLOT(resultGetOutputEnable(QString)));
-    connect(&psuThread, SIGNAL(resultGetStatus(QString,QString)), this, SLOT(resultGetStatus(QString,QString)));
-    connect(&psuThread, SIGNAL(resultGetIdentification(QString,QString)), this, SLOT(resultGetIdentification(QString,QString)));
-    connect(&psuThread, SIGNAL(resultRecallPanelSetting(int,QString)), this, SLOT(resultRecallPanelSetting(int,QString)));
-    connect(&psuThread, SIGNAL(resultSavePanelSetting(QString)), this, SLOT(resultSavePanelSetting(QString)));
-    connect(&psuThread, SIGNAL(resultSetOverCurrentPrtotection(QString)), this, SLOT(resultSetOverCurrentPrtotection(QString)));
-    connect(&psuThread, SIGNAL(resultSetKeyboardLock(QString)), this, SLOT(resultSetKeyboardLock(QString)));
+    connect(&psuThread, SIGNAL(resultOpenPort(QString)), this, SLOT(resultOpenPort(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultClosePort(QString)), this, SLOT(resultClosePort(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultSetOutputVoltage(QString)), this, SLOT(resultSetOutputVoltage(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultGetOutputCurrent(double_t,QString)), this, SLOT(resultGetOutputCurrent(double_t,QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultGetActualOutputCurrent(double_t,QString)), this, SLOT(resultGetActualOutputCurrent(double_t,QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultGetActualOutputVoltage(double_t,QString)), this, SLOT(resultGetActualOutputVoltage(double_t,QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultGetOutputEnable(QString)), this, SLOT(resultGetOutputEnable(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultGetStatus(QString,QString)), this, SLOT(resultGetStatus(QString,QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultGetIdentification(QString,QString)), this, SLOT(resultGetIdentification(QString,QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultRecallPanelSetting(int,QString)), this, SLOT(resultRecallPanelSetting(int,QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultSavePanelSetting(QString)), this, SLOT(resultSavePanelSetting(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultSetOverCurrentPrtotection(QString)), this, SLOT(resultSetOverCurrentPrtotection(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultSetKeyboardLock(QString)), this, SLOT(resultSetKeyboardLock(QString)), Qt::QueuedConnection);
 }

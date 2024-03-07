@@ -108,5 +108,6 @@ private:
     Ui::MainWindow  *ui;
     PsuThread       psuThread;
     QThread         tPsuThread;
+    bool            quitting;
 };
 #endif // MAINWINDOW_H

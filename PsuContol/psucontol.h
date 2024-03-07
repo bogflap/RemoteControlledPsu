@@ -53,6 +53,8 @@ public:
     // Utility functions
     void    waitForMilliSeconds(int milliSeconds);
 
+    bool    getPortOpen() const;
+
 private:
     bool    getRawStatus(unsigned char& status);
     bool    waitForActualVoltage(double_t &voltage,
@@ -66,8 +68,8 @@ private:
     bool    checkVoltage(float_t voltage);
     bool    checkCurrent(float_t current);
 
+private:
     QString lastError;
-
 };
 
 #endif // PSUCONTOL_H

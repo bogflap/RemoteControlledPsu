@@ -645,6 +645,11 @@ bool PsuContol::checkCurrent(float_t current)
         return result;
 }
 
+bool PsuContol::getPortOpen() const
+{
+    return serialPort->isOpen();
+}
+
 void PsuContol::waitForMilliSeconds(int milliSeconds)
 {
     long    longMilliSeconds = milliSeconds;
