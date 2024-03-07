@@ -21,21 +21,21 @@ public:
 
     bool    getVersion(QString& version);
     bool    getStatus(QTextStream& status);
-    void    getMaximumVoltageMv(double_t& voltageMv);
-    void    getMaximumCurrentMa(double_t& currentMa);
+    void    getMaximumVoltageMv(qreal& voltageMv);
+    void    getMaximumCurrentMa(qreal& currentMa);
 
-    bool    readCurrent(double_t& current);
-    bool    setCurrent(double_t mCurrent);
-    bool    actualCurrent(double_t& current);
+    bool    readCurrent(qreal& current);
+    bool    setCurrent(qreal mCurrent);
+    bool    actualCurrent(qreal& current);
     bool    setOverCurrentProtection(bool& enable);
 
-    bool    readVoltage(double_t& voltage);
-    bool    setVoltage(double_t mVoltage);
-    bool    rampUpVoltage(double_t &startVoltage,
-                          double_t &endVoltage,
-                          double_t &rampTimeMs,
+    bool    readVoltage(qreal& voltage);
+    bool    setVoltage(qreal mVoltage);
+    bool    rampUpVoltage(qreal &startVoltage,
+                          qreal &endVoltage,
+                          qreal &rampTimeMs,
                           unsigned int &steps);
-    bool    actualVoltage(double_t& voltage);
+    bool    actualVoltage(qreal& voltage);
 
     bool    setOverVoltageProtection(bool& enable);
 
@@ -57,7 +57,7 @@ public:
 
 private:
     bool    getRawStatus(unsigned char& status);
-    bool    waitForActualVoltage(double_t &voltage,
+    bool    waitForActualVoltage(qreal &voltage,
                                  int &timeoutMs,
                                  int &actualTimeMs);
 

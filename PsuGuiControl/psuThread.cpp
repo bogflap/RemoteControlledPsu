@@ -38,7 +38,7 @@ void PsuThread::psuClosePort()
     emit resultClosePort(errorText);
 }
 
-void PsuThread::psuSetOutputCurrent(double_t current)
+void PsuThread::psuSetOutputCurrent(qreal current)
 {
     Q_UNUSED(current);
 }
@@ -48,7 +48,7 @@ void PsuThread::psuGetOutputCurrent()
 
 }
 
-void PsuThread::psuSetOutputVoltage(double_t voltage)
+void PsuThread::psuSetOutputVoltage(qreal voltage)
 {
     Q_UNUSED(voltage);
 }

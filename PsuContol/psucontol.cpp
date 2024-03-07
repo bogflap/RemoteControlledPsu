@@ -124,17 +124,17 @@ bool PsuContol::getStatus(QTextStream &status)
     return result;
 }
 
-void PsuContol::getMaximumVoltageMv(double_t &voltageMv)
+void PsuContol::getMaximumVoltageMv(qreal &voltageMv)
 {
     voltageMv = psuParams->getMaxVoltageMv();
 }
 
-void PsuContol::getMaximumCurrentMa(double_t &currentMa)
+void PsuContol::getMaximumCurrentMa(qreal &currentMa)
 {
     currentMa = psuParams->getMaxCurrentMa();
 }
 
-bool PsuContol::readCurrent(double_t &current)
+bool PsuContol::readCurrent(qreal &current)
 {
     Q_UNUSED(current);
     bool    result = true;
@@ -142,7 +142,7 @@ bool PsuContol::readCurrent(double_t &current)
     return result;
 }
 
-bool PsuContol::setCurrent(double_t mCurrent)
+bool PsuContol::setCurrent(qreal mCurrent)
 {
     bool    result = false;
 
@@ -168,7 +168,7 @@ bool PsuContol::setCurrent(double_t mCurrent)
     return result;
 }
 
-bool PsuContol::actualCurrent(double_t &current)
+bool PsuContol::actualCurrent(qreal &current)
 {
     Q_UNUSED(current);
     bool    result = true;
@@ -184,7 +184,7 @@ bool PsuContol::setOverCurrentProtection(bool &enable)
     return result;
 }
 
-bool PsuContol::readVoltage(double_t &voltage)
+bool PsuContol::readVoltage(qreal &voltage)
 {
     QByteArray  command;
     QByteArray  readVoltage;
@@ -216,7 +216,7 @@ bool PsuContol::readVoltage(double_t &voltage)
     return result;
 }
 
-bool PsuContol::setVoltage(double_t mVoltage)
+bool PsuContol::setVoltage(qreal mVoltage)
 {
     bool    result = false;
 
@@ -242,16 +242,16 @@ bool PsuContol::setVoltage(double_t mVoltage)
     return result;
 }
 
-bool PsuContol::rampUpVoltage(double_t &startVoltage,
-                              double_t &endVoltage,
-                              double_t &rampTimeMs,
+bool PsuContol::rampUpVoltage(qreal &startVoltage,
+                              qreal &endVoltage,
+                              qreal &rampTimeMs,
                               unsigned int &steps)
 {
-    double_t    stepVoltage;
-    double_t    thisStepVoltage;
-    double_t    maxVoltage;
-    double_t    stepTime;
-    double_t    interCommandTime;
+    qreal    stepVoltage;
+    qreal    thisStepVoltage;
+    qreal    maxVoltage;
+    qreal    stepTime;
+    qreal    interCommandTime;
     int         iStepTimeMs;
     int         iRampTimeMs;
 
@@ -262,8 +262,8 @@ bool PsuContol::rampUpVoltage(double_t &startVoltage,
     while(true)
     {
         stepVoltage = (endVoltage - startVoltage) / (float_t) steps;
-        stepTime = rampTimeMs / (double_t) steps;
-        interCommandTime = double_t(psuParams->getInterCommandTimeMs());
+        stepTime = rampTimeMs / (qreal) steps;
+        interCommandTime = qreal(psuParams->getInterCommandTimeMs());
         iStepTimeMs = (int) stepTime;
 
         // Do some error checking first
@@ -350,7 +350,7 @@ bool PsuContol::rampUpVoltage(double_t &startVoltage,
     return result;
 }
 
-bool PsuContol::actualVoltage(double_t &voltage)
+bool PsuContol::actualVoltage(qreal &voltage)
 {
     QByteArray  command;
     QByteArray  readVoltage;
@@ -535,7 +535,7 @@ bool PsuContol::getRawStatus(unsigned char &status)
     return result;
 }
 
-bool PsuContol::waitForActualVoltage(double_t &voltage, int &timeoutMs, int &actualTimeMs)
+bool PsuContol::waitForActualVoltage(qreal &voltage, int &timeoutMs, int &actualTimeMs)
 {
     QTime       endTime;
     QTime       thisTime;
@@ -544,7 +544,7 @@ bool PsuContol::waitForActualVoltage(double_t &voltage, int &timeoutMs, int &act
 
     QTime       startTime = QTime::currentTime();
     int         interCommandTime = psuParams->getInterCommandTimeMs();
-    double_t    nowVoltage = 0.0;
+    qreal    nowVoltage = 0.0;
 
     endTime = startTime.addMSecs(timeoutMs);
 

@@ -215,7 +215,7 @@ void MainWindow::resultSetOutputCurrent(QString errorString)
     Q_UNUSED(errorString);
 }
 
-void MainWindow::resultGetOutputCurrent(double_t current, QString errorString)
+void MainWindow::resultGetOutputCurrent(qreal current, QString errorString)
 {
     Q_UNUSED(errorString);
     Q_UNUSED(current);
@@ -226,19 +226,19 @@ void MainWindow::resultSetOutputVoltage(QString errorString)
     Q_UNUSED(errorString);
 }
 
-void MainWindow::resultGetOutputVoltage(double_t voltage, QString errorString)
+void MainWindow::resultGetOutputVoltage(qreal voltage, QString errorString)
 {
     Q_UNUSED(errorString);
     Q_UNUSED(voltage);
 }
 
-void MainWindow::resultGetActualOutputCurrent(double_t current, QString errorString)
+void MainWindow::resultGetActualOutputCurrent(qreal current, QString errorString)
 {
     Q_UNUSED(errorString);
     Q_UNUSED(current);
 }
 
-void MainWindow::resultGetActualOutputVoltage(double_t voltage, QString errorString)
+void MainWindow::resultGetActualOutputVoltage(qreal voltage, QString errorString)
 {
     Q_UNUSED(errorString);
     Q_UNUSED(voltage);
@@ -341,7 +341,7 @@ void MainWindow::makeConnections()
     connect(this, SIGNAL(psuOpenPort(QString)), &psuThread, SLOT(psuOpenPort(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuClosePort()), &psuThread, SLOT(psuClosePort()), Qt::QueuedConnection);
     connect(this, SIGNAL(psuGetOutputCurrent()), &psuThread, SLOT(psuGetOutputCurrent()), Qt::QueuedConnection);
-    connect(this, SIGNAL(psuSetOutputVoltage(double_t)), &psuThread, SLOT(psuSetOutputVoltage(double_t)), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuSetOutputVoltage(qreal)), &psuThread, SLOT(psuSetOutputVoltage(qreal)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuGetOutputVoltage()), &psuThread, SLOT(psuGetOutputVoltage()), Qt::QueuedConnection);
     connect(this, SIGNAL(psuGetActualOutputCurrent()), &psuThread, SLOT(psuGetActualOutputCurrent()), Qt::QueuedConnection);
     connect(this, SIGNAL(psuGetActualOutputVoltage()), &psuThread, SLOT(psuGetActualOutputVoltage()), Qt::QueuedConnection);
@@ -356,9 +356,9 @@ void MainWindow::makeConnections()
     connect(&psuThread, SIGNAL(resultOpenPort(QString)), this, SLOT(resultOpenPort(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultClosePort(QString)), this, SLOT(resultClosePort(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultSetOutputVoltage(QString)), this, SLOT(resultSetOutputVoltage(QString)), Qt::QueuedConnection);
-    connect(&psuThread, SIGNAL(resultGetOutputCurrent(double_t,QString)), this, SLOT(resultGetOutputCurrent(double_t,QString)), Qt::QueuedConnection);
-    connect(&psuThread, SIGNAL(resultGetActualOutputCurrent(double_t,QString)), this, SLOT(resultGetActualOutputCurrent(double_t,QString)), Qt::QueuedConnection);
-    connect(&psuThread, SIGNAL(resultGetActualOutputVoltage(double_t,QString)), this, SLOT(resultGetActualOutputVoltage(double_t,QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultGetOutputCurrent(qreal,QString)), this, SLOT(resultGetOutputCurrent(qreal,QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultGetActualOutputCurrent(qreal,QString)), this, SLOT(resultGetActualOutputCurrent(qreal,QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultGetActualOutputVoltage(qreal,QString)), this, SLOT(resultGetActualOutputVoltage(qreal,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultGetOutputEnable(QString)), this, SLOT(resultGetOutputEnable(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultGetStatus(QString,QString)), this, SLOT(resultGetStatus(QString,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultGetIdentification(QString,QString)), this, SLOT(resultGetIdentification(QString,QString)), Qt::QueuedConnection);

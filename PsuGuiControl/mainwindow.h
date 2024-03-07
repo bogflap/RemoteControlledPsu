@@ -25,9 +25,9 @@ public:
 signals:
     void    psuOpenPort(QString);
     void    psuClosePort();
-    void    psuSetOutputCurrent(double_t);
+    void    psuSetOutputCurrent(qreal);
     void    psuGetOutputCurrent();
-    void    psuSetOutputVoltage(double_t);
+    void    psuSetOutputVoltage(qreal);
     void    psuGetOutputVoltage();
     void    psuGetActualOutputCurrent();
     void    psuGetActualOutputVoltage();
@@ -88,11 +88,11 @@ public slots:
     void    resultOpenPort(QString);
     void    resultClosePort(QString);
     void    resultSetOutputCurrent(QString);
-    void    resultGetOutputCurrent(double_t,QString);
+    void    resultGetOutputCurrent(qreal,QString);
     void    resultSetOutputVoltage(QString);
-    void    resultGetOutputVoltage(double_t, QString);
-    void    resultGetActualOutputCurrent(double_t, QString);
-    void    resultGetActualOutputVoltage(double_t, QString);
+    void    resultGetOutputVoltage(qreal, QString);
+    void    resultGetActualOutputCurrent(qreal, QString);
+    void    resultGetActualOutputVoltage(qreal, QString);
     void    resultGetOutputEnable(QString);
     void    resultGetStatus(QString status, QString);
     void    resultGetIdentification(QString, QString);
