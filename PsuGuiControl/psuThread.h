@@ -26,6 +26,9 @@ public slots:
     void    psuSavePanelSetting(int);
     void    psuSetOverCurrentPrtotection(bool);
     void    psuSetKeyboardLock(bool);
+    void    psuIsConstantCurrent();
+    void    psuIsConstantVoltage();
+    void    psuIsOutputEnabled();
 
 signals:
     void    resultOpenPort(QString);
@@ -42,6 +45,9 @@ signals:
     void    resultSavePanelSetting(QString);
     void    resultSetOverCurrentPrtotection(QString);
     void    resultSetKeyboardLock(QString);
+    void    resultIsConstantCurrent(bool, QString);
+    void    resultIsConstantVoltage(bool, QString);
+    void    resultIsOutputEnabled(bool, QString);
 };
 
 #endif // PSUTHREAD_H

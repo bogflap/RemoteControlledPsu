@@ -102,3 +102,36 @@ void PsuThread::psuSetKeyboardLock(bool enable)
 {
     Q_UNUSED(enable);
 }
+
+void PsuThread::psuIsConstantCurrent()
+{
+    bool    isCC = false;
+    QString error("");
+
+    gPsuControl.isConstantCurrent(isCC);
+    gPsuControl.getError(error);
+
+    emit resultIsConstantCurrent(isCC, error);
+}
+
+void PsuThread::psuIsConstantVoltage()
+{
+    bool    isCV = false;
+    QString error("");
+
+    gPsuControl.isConstantVoltage(isCV);
+    gPsuControl.getError(error);
+
+    emit resultIsConstantCurrent(isCV, error);
+}
+
+void PsuThread::psuIsOutputEnabled()
+{
+    bool    isOE = false;
+    QString error("");
+
+    gPsuControl.isOutputEnabled(isOE);
+    gPsuControl.getError(error);
+
+    emit resultIsConstantCurrent(isOE, error);
+}

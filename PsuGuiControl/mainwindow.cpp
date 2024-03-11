@@ -197,12 +197,21 @@ void MainWindow::voltsThousandthsDownClicked(bool checked)
 
 void MainWindow::resultOpenPort(QString errorString)
 {
-    showErrorText(errorString);
+    if (errorString.isEmpty())
+    {
+        showErrorText(errorString);
+    }
+    else
+    {
+        // Opened device so get some information about it
+        emit psuGetIdentification();
+        emit psuGetStatus();
+    }
 }
 
 void MainWindow::resultClosePort(QString errorString)
 {
-    Q_UNUSED(errorString);
+    showErrorText(errorString);
 
     if (quitting)
     {
@@ -251,14 +260,33 @@ void MainWindow::resultGetOutputEnable(QString errorString)
 
 void MainWindow::resultGetStatus(QString status, QString errorString)
 {
-    Q_UNUSED(errorString);
-    Q_UNUSED(status);
+    if (errorString != "")
+    {
+        showErrorText(errorString);
+    }
+    else
+    {
+        QStringList stats = status.split("\n");
+        ui->mode->setText(stats[0]);
+        ui->outputEnabled->setText(stats[1]);
+    }
 }
 
 void MainWindow::resultGetIdentification(QString identification, QString errorString)
 {
-    Q_UNUSED(errorString);
-    Q_UNUSED(identification);
+    if (errorString != "")
+    {
+        showErrorText(errorString);
+    }
+    else
+    {
+        QString idText;
+        QTextStream ts(&idText);
+
+        ts  <<  "Identifier = "
+            <<   identification;
+        ui->identification->setText(idText);
+    }
 }
 
 void MainWindow::resultRecallPanelSetting(int number, QString errorString)
@@ -279,6 +307,24 @@ void MainWindow::resultSetOverCurrentPrtotection(QString errorString)
 
 void MainWindow::resultSetKeyboardLock(QString errorString)
 {
+    Q_UNUSED(errorString);
+}
+
+void MainWindow::resultIsConstantCurrent(bool result, QString errorString)
+{
+    Q_UNUSED(result);
+    Q_UNUSED(errorString);
+}
+
+void MainWindow::resultIsConstantVoltage(bool result, QString errorString)
+{
+    Q_UNUSED(result);
+    Q_UNUSED(errorString);
+}
+
+void MainWindow::resultIsOutputEnabled(bool result, QString errorString)
+{
+    Q_UNUSED(result);
     Q_UNUSED(errorString);
 }
 
@@ -352,6 +398,9 @@ void MainWindow::makeConnections()
     connect(this, SIGNAL(psuSavePanelSetting(int)), &psuThread, SLOT(psuSavePanelSetting(int)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuSetOverCurrentPrtotection(bool)), &psuThread, SLOT(psuSetOverCurrentPrtotection(bool)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuSetKeyboardLock(bool)), &psuThread, SLOT(psuSetKeyboardLock(bool)), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuIsConstantCurrent()), &psuThread, SLOT(psuIsConstantCurrent()), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuIsConstantVoltage()), &psuThread, SLOT(psuIsConstantVoltage()), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuIsOutputEnabled()), &psuThread, SLOT(psuIsOutputEnabled()), Qt::QueuedConnection);
 
     connect(&psuThread, SIGNAL(resultOpenPort(QString)), this, SLOT(resultOpenPort(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultClosePort(QString)), this, SLOT(resultClosePort(QString)), Qt::QueuedConnection);
@@ -366,4 +415,7 @@ void MainWindow::makeConnections()
     connect(&psuThread, SIGNAL(resultSavePanelSetting(QString)), this, SLOT(resultSavePanelSetting(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultSetOverCurrentPrtotection(QString)), this, SLOT(resultSetOverCurrentPrtotection(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultSetKeyboardLock(QString)), this, SLOT(resultSetKeyboardLock(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultIsConstantCurrent(bool,QString)), this, SLOT(resultIsConstantCurrent(bool,QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultIsConstantVoltage(bool,QString)), this, SLOT(resultIsConstantVoltage(bool,QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultIsOutputEnabled(bool,QString)), this, SLOT(resultIsOutputEnabled(bool,QString)), Qt::QueuedConnection);
 }

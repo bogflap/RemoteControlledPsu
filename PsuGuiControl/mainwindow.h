@@ -38,6 +38,31 @@ signals:
     void    psuSavePanelSetting(int);
     void    psuSetOverCurrentPrtotection(bool);
     void    psuSetKeyboardLock(bool);
+    void    psuIsConstantCurrent();
+    void    psuIsConstantVoltage();
+    void    psuIsOutputEnabled();
+
+    // Slots for PSU thread results
+public slots:
+
+    void    resultOpenPort(QString);
+    void    resultClosePort(QString);
+    void    resultSetOutputCurrent(QString);
+    void    resultGetOutputCurrent(qreal,QString);
+    void    resultSetOutputVoltage(QString);
+    void    resultGetOutputVoltage(qreal, QString);
+    void    resultGetActualOutputCurrent(qreal, QString);
+    void    resultGetActualOutputVoltage(qreal, QString);
+    void    resultGetOutputEnable(QString);
+    void    resultGetStatus(QString status, QString);
+    void    resultGetIdentification(QString, QString);
+    void    resultRecallPanelSetting(int, QString);
+    void    resultSavePanelSetting(QString);
+    void    resultSetOverCurrentPrtotection(QString);
+    void    resultSetKeyboardLock(QString);
+    void    resultIsConstantCurrent(bool, QString);
+    void    resultIsConstantVoltage(bool, QString);
+    void    resultIsOutputEnabled(bool, QString);
 
 private:
     void    getSerialPorts();
@@ -81,25 +106,6 @@ private slots:
     void    voltsHundrethsDownClicked(bool);
     void    voltsThousandthsUpClicked(bool);
     void    voltsThousandthsDownClicked(bool);
-
-// Slots for PSU thread results
-public slots:
-
-    void    resultOpenPort(QString);
-    void    resultClosePort(QString);
-    void    resultSetOutputCurrent(QString);
-    void    resultGetOutputCurrent(qreal,QString);
-    void    resultSetOutputVoltage(QString);
-    void    resultGetOutputVoltage(qreal, QString);
-    void    resultGetActualOutputCurrent(qreal, QString);
-    void    resultGetActualOutputVoltage(qreal, QString);
-    void    resultGetOutputEnable(QString);
-    void    resultGetStatus(QString status, QString);
-    void    resultGetIdentification(QString, QString);
-    void    resultRecallPanelSetting(int, QString);
-    void    resultSavePanelSetting(QString);
-    void    resultSetOverCurrentPrtotection(QString);
-    void    resultSetKeyboardLock(QString);
 
 private:
     void    showErrorText(QString text);
