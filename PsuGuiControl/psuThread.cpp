@@ -93,7 +93,7 @@ void PsuThread::psuSavePanelSetting(int number)
     Q_UNUSED(number);
 }
 
-void PsuThread::psuSetOverCurrentPrtotection(bool enable)
+void PsuThread::psuSetOverCurrentProtection(bool enable)
 {
     Q_UNUSED(enable);
 }

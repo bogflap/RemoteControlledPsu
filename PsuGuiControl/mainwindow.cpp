@@ -266,9 +266,15 @@ void MainWindow::resultGetStatus(QString status, QString errorString)
     }
     else
     {
+        // Display status results and then get constant current/voltage and
+        // output enabled settings.
+        // After that it is up to the user to do something
         QStringList stats = status.split("\n");
         ui->mode->setText(stats[0]);
         ui->outputEnabled->setText(stats[1]);
+
+        emit psuIsConstantCurrent();
+        emit psuIsOutputEnabled();
     }
 }
 
@@ -300,7 +306,7 @@ void MainWindow::resultSavePanelSetting(QString errorString)
     Q_UNUSED(errorString);
 }
 
-void MainWindow::resultSetOverCurrentPrtotection(QString errorString)
+void MainWindow::resultSetOverCurrentProtection(QString errorString)
 {
     Q_UNUSED(errorString);
 }
@@ -312,20 +318,38 @@ void MainWindow::resultSetKeyboardLock(QString errorString)
 
 void MainWindow::resultIsConstantCurrent(bool result, QString errorString)
 {
-    Q_UNUSED(result);
-    Q_UNUSED(errorString);
+    if (errorString != "")
+    {
+        showErrorText(errorString);
+    }
+    else
+    {
+        setConstantCurrent(result);
+    }
 }
 
 void MainWindow::resultIsConstantVoltage(bool result, QString errorString)
 {
-    Q_UNUSED(result);
-    Q_UNUSED(errorString);
+    if (errorString != "")
+    {
+        showErrorText(errorString);
+    }
+    else
+    {
+        setConstantCurrent(!result);
+    }
 }
 
 void MainWindow::resultIsOutputEnabled(bool result, QString errorString)
 {
-    Q_UNUSED(result);
-    Q_UNUSED(errorString);
+    if (errorString != "")
+    {
+        showErrorText(errorString);
+    }
+    else
+    {
+        ui->enableOutput->setEnabled(result);
+    }
 }
 
 void MainWindow::showErrorText(QString text)
@@ -334,6 +358,15 @@ void MainWindow::showErrorText(QString text)
     {
         ui->statusbar->showMessage(text);
     }
+}
+
+void MainWindow::setConstantCurrent(bool constantCurrent)
+{
+    // It is either constant current or constant voltage
+    ui->constantCurrent->setEnabled(constantCurrent);
+    ui->constantVoltage->setEnabled(!constantCurrent);
+    ui->ampsApply->setEnabled(constantCurrent);
+    ui->voltsApply->setEnabled(!constantCurrent);
 }
 
 void MainWindow::getSerialPorts()
@@ -396,7 +429,7 @@ void MainWindow::makeConnections()
     connect(this, SIGNAL(psuGetIdentification()), &psuThread, SLOT(psuGetIdentification()), Qt::QueuedConnection);
     connect(this, SIGNAL(psuRecallPanelSetting(int)), &psuThread, SLOT(psuRecallPanelSetting(int)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuSavePanelSetting(int)), &psuThread, SLOT(psuSavePanelSetting(int)), Qt::QueuedConnection);
-    connect(this, SIGNAL(psuSetOverCurrentPrtotection(bool)), &psuThread, SLOT(psuSetOverCurrentPrtotection(bool)), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuSetOverCurrentProtection(bool)), &psuThread, SLOT(psuSetOverCurrentProtection(bool)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuSetKeyboardLock(bool)), &psuThread, SLOT(psuSetKeyboardLock(bool)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuIsConstantCurrent()), &psuThread, SLOT(psuIsConstantCurrent()), Qt::QueuedConnection);
     connect(this, SIGNAL(psuIsConstantVoltage()), &psuThread, SLOT(psuIsConstantVoltage()), Qt::QueuedConnection);
@@ -413,7 +446,7 @@ void MainWindow::makeConnections()
     connect(&psuThread, SIGNAL(resultGetIdentification(QString,QString)), this, SLOT(resultGetIdentification(QString,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultRecallPanelSetting(int,QString)), this, SLOT(resultRecallPanelSetting(int,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultSavePanelSetting(QString)), this, SLOT(resultSavePanelSetting(QString)), Qt::QueuedConnection);
-    connect(&psuThread, SIGNAL(resultSetOverCurrentPrtotection(QString)), this, SLOT(resultSetOverCurrentPrtotection(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultSetOverCurrentProtection(QString)), this, SLOT(resultSetOverCurrentProtection(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultSetKeyboardLock(QString)), this, SLOT(resultSetKeyboardLock(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultIsConstantCurrent(bool,QString)), this, SLOT(resultIsConstantCurrent(bool,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultIsConstantVoltage(bool,QString)), this, SLOT(resultIsConstantVoltage(bool,QString)), Qt::QueuedConnection);

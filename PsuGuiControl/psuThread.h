@@ -24,7 +24,7 @@ public slots:
     void    psuGetIdentification();
     void    psuRecallPanelSetting(int);
     void    psuSavePanelSetting(int);
-    void    psuSetOverCurrentPrtotection(bool);
+    void    psuSetOverCurrentProtection(bool);
     void    psuSetKeyboardLock(bool);
     void    psuIsConstantCurrent();
     void    psuIsConstantVoltage();
@@ -43,7 +43,7 @@ signals:
     void    resultGetIdentification(QString, QString);
     void    resultRecallPanelSetting(int, QString);
     void    resultSavePanelSetting(QString);
-    void    resultSetOverCurrentPrtotection(QString);
+    void    resultSetOverCurrentProtection(QString);
     void    resultSetKeyboardLock(QString);
     void    resultIsConstantCurrent(bool, QString);
     void    resultIsConstantVoltage(bool, QString);

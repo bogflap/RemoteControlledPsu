@@ -58,7 +58,7 @@ public slots:
     void    resultGetIdentification(QString, QString);
     void    resultRecallPanelSetting(int, QString);
     void    resultSavePanelSetting(QString);
-    void    resultSetOverCurrentPrtotection(QString);
+    void    resultSetOverCurrentProtection(QString);
     void    resultSetKeyboardLock(QString);
     void    resultIsConstantCurrent(bool, QString);
     void    resultIsConstantVoltage(bool, QString);
@@ -109,6 +109,7 @@ private slots:
 
 private:
     void    showErrorText(QString text);
+    void    setConstantCurrent(bool constantCurrent);
 
 private:
     Ui::MainWindow  *ui;

@@ -826,7 +826,7 @@ Voltage</string>
            <enum>QLayout::SetDefaultConstraint</enum>
           </property>
           <item>
-           <widget class="QLabel" name="votsApply">
+           <widget class="QLabel" name="voltsApply">
             <property name="enabled">
              <bool>false</bool>
             </property>
