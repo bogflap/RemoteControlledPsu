@@ -6,6 +6,7 @@
 #include <QLabel>
 
 #include "psuThread.h"
+#include "lcdcontroller.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -36,7 +37,7 @@ signals:
     void    psuGetIdentification();
     void    psuRecallPanelSetting(int);
     void    psuSavePanelSetting(int);
-    void    psuSetOverCurrentPrtotection(bool);
+    void    psuSetOverCurrentProtection(bool);
     void    psuSetKeyboardLock(bool);
     void    psuIsConstantCurrent();
     void    psuIsConstantVoltage();
@@ -110,11 +111,14 @@ private slots:
 private:
     void    showErrorText(QString text);
     void    setConstantCurrent(bool constantCurrent);
+    void    setupLcds();
 
 private:
     Ui::MainWindow  *ui;
     PsuThread       psuThread;
     QThread         tPsuThread;
     bool            quitting;
+    lcdController   ampsLcd;
+    lcdController   voltsLcd;
 };
 #endif // MAINWINDOW_H

@@ -10,14 +10,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     psuThread.moveToThread(&tPsuThread);
-    connect(    &tPsuThread,
-                &QThread::finished,
-                &psuThread,
-                &QObject::deleteLater);
     tPsuThread.start();
 
     quitting = false;
 
+    setupLcds();
     makeConnections();
     getSerialPorts();
 }
@@ -73,51 +70,71 @@ void MainWindow::constantCurrentToggled(bool checked)
 void MainWindow::ampsTensUpClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    ampsLcd.upTens();
 }
 
 void MainWindow::ampsTensDownClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    ampsLcd.downTens();
 }
 
 void MainWindow::ampsOnesUpClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    ampsLcd.upOnes();
 }
 
 void MainWindow::ampsOnesDownClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    ampsLcd.downOnes();
 }
 
 void MainWindow::ampsTenthsUpClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    ampsLcd.upTenths();
 }
 
 void MainWindow::ampsTenthsDownClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    ampsLcd.downTenths();
 }
 
 void MainWindow::ampsHundrethsUpClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    ampsLcd.upHundreths();
 }
 
 void MainWindow::ampsHundrethsDownClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    ampsLcd.downHundreths();
 }
 
 void MainWindow::ampsThousandthsUpClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    ampsLcd.upThousandths();
 }
 
 void MainWindow::ampsThousandthsDownClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    ampsLcd.downThousandths();
 }
 
 void MainWindow::ampsApplyClicked(bool checked)
@@ -128,6 +145,8 @@ void MainWindow::ampsApplyClicked(bool checked)
 void MainWindow::ampsResetClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    ampsLcd.setValues(0, 0, 0, 0, 0);
 }
 
 void MainWindow::constantVoltageToggled(bool checked)
@@ -143,56 +162,78 @@ void MainWindow::voltsApplyClicked(bool checked)
 void MainWindow::voltsResetClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    voltsLcd.setValues(0, 0, 0, 0, 0);
 }
 
 void MainWindow::voltsTensUpClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    voltsLcd.upTens();
 }
 
 void MainWindow::voltsTensDownClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    voltsLcd.downTens();
 }
 
 void MainWindow::voltsOnesUpClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    voltsLcd.upOnes();
 }
 
 void MainWindow::voltsOnesDownClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    voltsLcd.downOnes();
 }
 
 void MainWindow::voltsTenthsUpClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    voltsLcd.upTenths();
 }
 
 void MainWindow::voltsTenthsDownClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    voltsLcd.downTenths();
 }
 
 void MainWindow::voltsHundrethsUpClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    voltsLcd.upHundreths();
 }
 
 void MainWindow::voltsHundrethsDownClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    voltsLcd.downHundreths();
 }
 
 void MainWindow::voltsThousandthsUpClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    voltsLcd.upThousandths();
 }
 
 void MainWindow::voltsThousandthsDownClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    voltsLcd.downThousandths();
 }
 
 void MainWindow::resultOpenPort(QString errorString)
@@ -369,6 +410,23 @@ void MainWindow::setConstantCurrent(bool constantCurrent)
     ui->voltsApply->setEnabled(!constantCurrent);
 }
 
+void MainWindow::setupLcds()
+{
+    ampsLcd.setDigits(ui->ampsTens,
+                      ui->ampsOnes,
+                      ui->ampsTenths,
+                      ui->ampsHundreths,
+                      ui->ampsThousandths);
+    ampsLcd.setValues(0, 0, 0, 0, 0);
+
+    voltsLcd.setDigits(ui->voltsTens,
+                       ui->voltsOnes,
+                       ui->voltsTenths,
+                       ui->voltsHundreths,
+                       ui->voltsThousandths);
+    voltsLcd.setValues(0, 0, 0, 0, 0);
+}
+
 void MainWindow::getSerialPorts()
 {
     Q_FOREACH(QSerialPortInfo port, QSerialPortInfo::availablePorts())
@@ -403,6 +461,7 @@ void MainWindow::makeConnections()
     connect(ui->ampsHundrethsDown, SIGNAL(clicked(bool)), this, SLOT(ampsHundrethsDownClicked(bool)));
     connect(ui->ampsThousandthsUp, SIGNAL(clicked(bool)), this, SLOT(ampsThousandthsUpClicked(bool)));
     connect(ui->ampsThousandthsDown, SIGNAL(clicked(bool)), this, SLOT(ampsThousandthsDownClicked(bool)));
+    connect(ui->ampsReset, SIGNAL(clicked(bool)), this, SLOT(ampsResetClicked(bool)));
 
     connect(ui->constantVoltage, SIGNAL(toggled(bool)), this, SLOT(constantVoltageToggled(bool)));
     connect(ui->voltsTensUp, SIGNAL(clicked(bool)), this, SLOT(voltsTensUpClicked(bool)));
@@ -415,8 +474,8 @@ void MainWindow::makeConnections()
     connect(ui->voltsHundrethsDown, SIGNAL(clicked(bool)), this, SLOT(voltsHundrethsDownClicked(bool)));
     connect(ui->voltsThousandthsUp, SIGNAL(clicked(bool)), this, SLOT(voltsThousandthsUpClicked(bool)));
     connect(ui->voltsThousandthsDown, SIGNAL(clicked(bool)), this, SLOT(voltsThousandthsDownClicked(bool)));
+    connect(ui->voltsReset, SIGNAL(clicked(bool)), this, SLOT(voltsResetClicked(bool)));
 
-//    QObject::connect(this, &MainWindow::psuOpenPort, &psuThread, &PsuThread::psuOpenPort);
     connect(this, SIGNAL(psuOpenPort(QString)), &psuThread, SLOT(psuOpenPort(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuClosePort()), &psuThread, SLOT(psuClosePort()), Qt::QueuedConnection);
     connect(this, SIGNAL(psuGetOutputCurrent()), &psuThread, SLOT(psuGetOutputCurrent()), Qt::QueuedConnection);

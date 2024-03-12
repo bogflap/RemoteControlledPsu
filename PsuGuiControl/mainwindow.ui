@@ -345,7 +345,7 @@ Current</string>
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_12" stretch="10,2,4">
+         <layout class="QVBoxLayout" name="verticalLayout_12" stretch="10,2,0">
           <property name="sizeConstraint">
            <enum>QLayout::SetDefaultConstraint</enum>
           </property>
@@ -382,15 +382,9 @@ Current</string>
            </spacer>
           </item>
           <item>
-           <widget class="QLabel" name="ampsReset">
-            <property name="frameShape">
-             <enum>QFrame::Panel</enum>
-            </property>
+           <widget class="QPushButton" name="ampsReset">
             <property name="text">
              <string>Reset</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -821,7 +815,7 @@ Voltage</string>
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_19" stretch="10,2,4">
+         <layout class="QVBoxLayout" name="verticalLayout_19" stretch="10,2,0">
           <property name="sizeConstraint">
            <enum>QLayout::SetDefaultConstraint</enum>
           </property>
@@ -858,15 +852,9 @@ Voltage</string>
            </spacer>
           </item>
           <item>
-           <widget class="QLabel" name="voltsReset">
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
-            </property>
+           <widget class="QPushButton" name="voltsReset">
             <property name="text">
              <string>Reset</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
