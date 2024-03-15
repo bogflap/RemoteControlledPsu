@@ -7,6 +7,7 @@
 
 #include "psuThread.h"
 #include "lcdcontroller.h"
+#include "lcdfloattodigits.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -112,13 +113,17 @@ private:
     void    showErrorText(QString text);
     void    setConstantCurrent(bool constantCurrent);
     void    setupLcds();
+    void    setActualAmps(qreal value);
+    void    setActualVolts(qreal value);
+
 
 private:
-    Ui::MainWindow  *ui;
-    PsuThread       psuThread;
-    QThread         tPsuThread;
-    bool            quitting;
-    lcdController   ampsLcd;
-    lcdController   voltsLcd;
+    Ui::MainWindow      *ui;
+    PsuThread           psuThread;
+    QThread             tPsuThread;
+    bool                quitting;
+    lcdController       ampsLcd;
+    lcdController       voltsLcd;
+    lcdFloatToDigits    floatToDigits;
 };
 #endif // MAINWINDOW_H

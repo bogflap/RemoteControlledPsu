@@ -10,12 +10,14 @@ CONFIG += c++17
 
 SOURCES += \
     lcdcontroller.cpp \
+    lcdfloattodigits.cpp \
     main.cpp \
     mainwindow.cpp \
     psuThread.cpp
 
 HEADERS += \
     lcdcontroller.h \
+    lcdfloattodigits.h \
     mainwindow.h \
     psuThread.h
 

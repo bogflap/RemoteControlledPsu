@@ -425,6 +425,43 @@ void MainWindow::setupLcds()
                        ui->voltsHundreths,
                        ui->voltsThousandths);
     voltsLcd.setValues(0, 0, 0, 0, 0);
+
+    setActualAmps(0.0);
+    setActualVolts(0.0);
+}
+
+void MainWindow::setActualAmps(qreal value)
+{
+    int     tens;
+    int     ones;
+    int     tenths;
+    int     hundreths;
+    int     thousandths;
+
+    floatToDigits.floatToDigits(value, tens, ones, tenths, hundreths, thousandths);
+
+    ui->actualAmpsTens->display(tens);
+    ui->actualAmpsOnes->display(ones);
+    ui->actualAmpsTenths->display(tenths);
+    ui->actualAmpsHundreths->display(hundreths);
+    ui->actualAmpsThousandths->display(thousandths);
+}
+
+void MainWindow::setActualVolts(qreal value)
+{
+    int     tens;
+    int     ones;
+    int     tenths;
+    int     hundreths;
+    int     thousandths;
+
+    floatToDigits.floatToDigits(value, tens, ones, tenths, hundreths, thousandths);
+
+    ui->actualVoltsTens->display(tens);
+    ui->actualVoltsOnes->display(ones);
+    ui->actualVoltsTenths->display(tenths);
+    ui->actualVoltsHundreths->display(hundreths);
+    ui->actualVoltsThousandths->display(thousandths);
 }
 
 void MainWindow::getSerialPorts()
