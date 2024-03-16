@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QThread>
 #include <QLabel>
+#include <QTimer>
 
 #include "psuThread.h"
 #include "lcdcontroller.h"
@@ -109,6 +110,10 @@ private slots:
     void    voltsThousandthsUpClicked(bool);
     void    voltsThousandthsDownClicked(bool);
 
+    // General slots
+private slots:
+    void    ampsVoltsTimeout();
+
 private:
     void    showErrorText(QString text);
     void    setConstantCurrent(bool constantCurrent);
@@ -121,6 +126,7 @@ private:
     Ui::MainWindow      *ui;
     PsuThread           psuThread;
     QThread             tPsuThread;
+    QTimer              ampsVoltsTimer;
     bool                quitting;
     lcdController       ampsLcd;
     lcdController       voltsLcd;

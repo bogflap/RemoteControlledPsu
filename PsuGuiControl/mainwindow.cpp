@@ -4,8 +4,9 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QMainWindow(parent),
+    ui(new Ui::MainWindow),
+    ampsVoltsTimer(parent)
 {
     ui->setupUi(this);
 
@@ -236,6 +237,12 @@ void MainWindow::voltsThousandthsDownClicked(bool checked)
     voltsLcd.downThousandths();
 }
 
+void MainWindow::ampsVoltsTimeout()
+{
+    emit psuGetActualOutputCurrent();
+    emit psuGetActualOutputVoltage();
+}
+
 void MainWindow::resultOpenPort(QString errorString)
 {
     if (errorString.isEmpty())
@@ -284,14 +291,26 @@ void MainWindow::resultGetOutputVoltage(qreal voltage, QString errorString)
 
 void MainWindow::resultGetActualOutputCurrent(qreal current, QString errorString)
 {
-    Q_UNUSED(errorString);
-    Q_UNUSED(current);
+    if (errorString != "")
+    {
+        showErrorText(errorString);
+    }
+    else
+    {
+        setActualAmps(current);
+    }
 }
 
 void MainWindow::resultGetActualOutputVoltage(qreal voltage, QString errorString)
 {
-    Q_UNUSED(errorString);
-    Q_UNUSED(voltage);
+    if (errorString != "")
+    {
+        showErrorText(errorString);
+    }
+    else
+    {
+        setActualVolts(voltage);
+    }
 }
 
 void MainWindow::resultGetOutputEnable(QString errorString)
@@ -390,6 +409,7 @@ void MainWindow::resultIsOutputEnabled(bool result, QString errorString)
     else
     {
         ui->enableOutput->setEnabled(result);
+        ampsVoltsTimer.start(1000);
     }
 }
 
@@ -547,4 +567,6 @@ void MainWindow::makeConnections()
     connect(&psuThread, SIGNAL(resultIsConstantCurrent(bool,QString)), this, SLOT(resultIsConstantCurrent(bool,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultIsConstantVoltage(bool,QString)), this, SLOT(resultIsConstantVoltage(bool,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultIsOutputEnabled(bool,QString)), this, SLOT(resultIsOutputEnabled(bool,QString)), Qt::QueuedConnection);
+
+    connect(&ampsVoltsTimer, SIGNAL(timeout()), this, SLOT(ampsVoltsTimeout()), Qt::QueuedConnection);
 }
