@@ -32,6 +32,11 @@ bool PsuContol::open(const QString &portName)
     serialPort->setPortName(port);
 
     result = serialPort->open(QIODevice::ReadWrite);
+    lastError = "";
+    if (!result)
+    {
+        lastError = serialPort->errorString();
+    }
 
     return result;
 }
@@ -170,8 +175,32 @@ bool PsuContol::setCurrent(qreal mCurrent)
 
 bool PsuContol::actualCurrent(qreal &current)
 {
-    Q_UNUSED(current);
-    bool    result = true;
+    QByteArray  command;
+    QByteArray  readCurrent;
+    QString     stringCurrent;
+
+    bool        result = true;
+
+    while(true)
+    {
+        psuParams->getActualCurrentCommand(command);
+        if (!sendCommand(command))
+        {
+            result = false;
+            break;
+        }
+
+        if (!receiveResponse(readCurrent))
+        {
+            result = false;
+            break;
+        }
+
+        stringCurrent = QString::fromUtf8(readCurrent);
+        current = stringCurrent.toDouble();
+
+        break;
+    }
 
     return result;
 }

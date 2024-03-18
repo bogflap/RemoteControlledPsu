@@ -115,7 +115,7 @@ private slots:
     void    ampsVoltsTimeout();
 
 private:
-    void    showErrorText(QString text);
+    void    showStatusText(QString text);
     void    setConstantCurrent(bool constantCurrent);
     void    setupLcds();
     void    setActualAmps(qreal value);

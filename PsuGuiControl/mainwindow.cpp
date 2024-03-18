@@ -245,12 +245,22 @@ void MainWindow::ampsVoltsTimeout()
 
 void MainWindow::resultOpenPort(QString errorString)
 {
-    if (errorString.isEmpty())
+    // Need to be able to close an open port
+    // Some messages say Port already open
+    ui->closeButton->setEnabled(true);
+
+    if (!errorString.isEmpty())
     {
-        showErrorText(errorString);
+        showStatusText(errorString);
     }
     else
     {
+        QString text;
+        QTextStream ts(&text);
+
+        ts << "Opened port " << ui->serialPort->currentText();
+        showStatusText(text);
+
         // Opened device so get some information about it
         emit psuGetIdentification();
         emit psuGetStatus();
@@ -259,7 +269,7 @@ void MainWindow::resultOpenPort(QString errorString)
 
 void MainWindow::resultClosePort(QString errorString)
 {
-    showErrorText(errorString);
+    showStatusText(errorString);
 
     if (quitting)
     {
@@ -293,7 +303,7 @@ void MainWindow::resultGetActualOutputCurrent(qreal current, QString errorString
 {
     if (errorString != "")
     {
-        showErrorText(errorString);
+        showStatusText(errorString);
     }
     else
     {
@@ -305,7 +315,7 @@ void MainWindow::resultGetActualOutputVoltage(qreal voltage, QString errorString
 {
     if (errorString != "")
     {
-        showErrorText(errorString);
+        showStatusText(errorString);
     }
     else
     {
@@ -322,7 +332,7 @@ void MainWindow::resultGetStatus(QString status, QString errorString)
 {
     if (errorString != "")
     {
-        showErrorText(errorString);
+        showStatusText(errorString);
     }
     else
     {
@@ -342,7 +352,7 @@ void MainWindow::resultGetIdentification(QString identification, QString errorSt
 {
     if (errorString != "")
     {
-        showErrorText(errorString);
+        showStatusText(errorString);
     }
     else
     {
@@ -380,7 +390,7 @@ void MainWindow::resultIsConstantCurrent(bool result, QString errorString)
 {
     if (errorString != "")
     {
-        showErrorText(errorString);
+        showStatusText(errorString);
     }
     else
     {
@@ -392,7 +402,7 @@ void MainWindow::resultIsConstantVoltage(bool result, QString errorString)
 {
     if (errorString != "")
     {
-        showErrorText(errorString);
+        showStatusText(errorString);
     }
     else
     {
@@ -404,7 +414,7 @@ void MainWindow::resultIsOutputEnabled(bool result, QString errorString)
 {
     if (errorString != "")
     {
-        showErrorText(errorString);
+        showStatusText(errorString);
     }
     else
     {
@@ -413,7 +423,7 @@ void MainWindow::resultIsOutputEnabled(bool result, QString errorString)
     }
 }
 
-void MainWindow::showErrorText(QString text)
+void MainWindow::showStatusText(QString text)
 {
     if (text != "")
     {

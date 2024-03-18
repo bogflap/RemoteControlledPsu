@@ -15,8 +15,10 @@ void PsuThread::psuOpenPort(QString port)
 {
     QString errorText = "";
 
-    gPsuControl.open(port);
-    gPsuControl.getError(errorText);
+    if (!gPsuControl.open(port))
+    {
+        gPsuControl.getError(errorText);
+    }
 
     emit resultOpenPort(errorText);
 }
@@ -60,12 +62,30 @@ void PsuThread::psuGetOutputVoltage()
 
 void PsuThread::psuGetActualOutputCurrent()
 {
+    qreal   current;
 
+    QString error("");
+
+    if (!gPsuControl.actualCurrent(current))
+    {
+        gPsuControl.getError(error);
+    }
+
+    emit resultGetActualOutputCurrent(current, error);
 }
 
 void PsuThread::psuGetActualOutputVoltage()
 {
+    qreal   voltage;
 
+    QString error("");
+
+    if (!gPsuControl.actualVoltage(voltage))
+    {
+        gPsuControl.getError(error);
+    }
+
+    emit resultGetActualOutputVoltage(voltage, error);
 }
 
 void PsuThread::psuSetOutputEnable(bool enable)
@@ -75,12 +95,30 @@ void PsuThread::psuSetOutputEnable(bool enable)
 
 void PsuThread::psuGetStatus()
 {
+    QString status;
 
+    QString error("");
+    QTextStream tStatus(&status);
+
+    if (!gPsuControl.getStatus(tStatus))
+    {
+        gPsuControl.getError(error);
+    }
+
+    emit resultGetStatus(status, error);
 }
 
 void PsuThread::psuGetIdentification()
 {
+    QString id("");
+    QString error("");
 
+    if (!gPsuControl.getVersion(id))
+    {
+        gPsuControl.getError(error);
+    }
+
+    emit resultGetIdentification(id, error);
 }
 
 void PsuThread::psuRecallPanelSetting(int number)
@@ -108,8 +146,10 @@ void PsuThread::psuIsConstantCurrent()
     bool    isCC = false;
     QString error("");
 
-    gPsuControl.isConstantCurrent(isCC);
-    gPsuControl.getError(error);
+    if (!gPsuControl.isConstantCurrent(isCC))
+    {
+        gPsuControl.getError(error);
+    }
 
     emit resultIsConstantCurrent(isCC, error);
 }
@@ -130,8 +170,10 @@ void PsuThread::psuIsOutputEnabled()
     bool    isOE = false;
     QString error("");
 
-    gPsuControl.isOutputEnabled(isOE);
-    gPsuControl.getError(error);
+    if (!gPsuControl.isOutputEnabled(isOE))
+    {
+        gPsuControl.getError(error);
+    }
 
-    emit resultIsConstantCurrent(isOE, error);
+    emit resultIsOutputEnabled(isOE, error);
 }

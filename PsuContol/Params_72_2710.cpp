@@ -68,7 +68,8 @@ void Params_72_2710::getReadCurrentCommand(QByteArray &command)
 
 void Params_72_2710::getActualCurrentCommand(QByteArray &command)
 {
-    Q_UNUSED(command);
+    QString localCommand = QString("IOUT1?");
+    command = localCommand.toUtf8();
 }
 
 void Params_72_2710::getOverCurrentProtectionCommand(QByteArray &command, bool &enable)
