@@ -396,6 +396,8 @@ void MainWindow::resultIsConstantCurrent(bool result, QString errorString)
     }
     else
     {
+        ui->constantCurrent->setEnabled(true);
+        ui->constantVoltage->setEnabled(true);
         setConstantCurrent(result);
     }
 }
@@ -408,6 +410,8 @@ void MainWindow::resultIsConstantVoltage(bool result, QString errorString)
     }
     else
     {
+        ui->constantCurrent->setEnabled(true);
+        ui->constantVoltage->setEnabled(true);
         setConstantCurrent(!result);
     }
 }
@@ -436,8 +440,8 @@ void MainWindow::showStatusText(QString text)
 void MainWindow::setConstantCurrent(bool constantCurrent)
 {
     // It is either constant current or constant voltage
-    ui->constantCurrent->setEnabled(constantCurrent);
-    ui->constantVoltage->setEnabled(!constantCurrent);
+    ui->constantCurrent->setChecked(constantCurrent);
+    ui->constantVoltage->setChecked(!constantCurrent);
     ui->ampsApply->setEnabled(constantCurrent);
     ui->voltsApply->setEnabled(!constantCurrent);
 }
