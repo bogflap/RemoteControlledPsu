@@ -120,6 +120,8 @@ private:
     void    setupLcds();
     void    setActualAmps(qreal value);
     void    setActualVolts(qreal value);
+    void    setOutputVolts(qreal value);
+    void    setOutputAmps(qreal value);
 
 
 private:

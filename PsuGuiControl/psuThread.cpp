@@ -65,7 +65,16 @@ void PsuThread::psuSetOutputCurrent(qreal current)
 
 void PsuThread::psuGetOutputCurrent()
 {
+    qreal   current;
 
+    QString error("");
+
+    if (!gPsuControl.readCurrent(current))
+    {
+        gPsuControl.getError(error);
+    }
+
+    emit resultGetOutputCurrent(current, error);
 }
 
 void PsuThread::psuSetOutputVoltage(qreal voltage)
@@ -75,7 +84,16 @@ void PsuThread::psuSetOutputVoltage(qreal voltage)
 
 void PsuThread::psuGetOutputVoltage()
 {
+    qreal   voltage;
 
+    QString error("");
+
+    if (!gPsuControl.readVoltage(voltage))
+    {
+        gPsuControl.getError(error);
+    }
+
+    emit resultGetOutputVoltage(voltage, error);
 }
 
 void PsuThread::psuGetActualOutputCurrent()

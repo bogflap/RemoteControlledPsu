@@ -35,6 +35,7 @@ public slots:
 signals:
     void    resultOpenPort(QString);
     void    resultClosePort(QString);
+    void    resultSetOutputCurrent(QString);
     void    resultGetOutputCurrent(qreal,QString);
     void    resultSetOutputVoltage(QString);
     void    resultGetOutputVoltage(qreal, QString);

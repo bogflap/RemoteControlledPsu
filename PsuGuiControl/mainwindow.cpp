@@ -266,6 +266,8 @@ void MainWindow::resultOpenPort(QString errorString)
         // Opened device so get some information about it
         emit psuGetIdentification();
         emit psuGetStatus();
+        emit psuGetOutputCurrent();
+        emit psuGetOutputVoltage();
     }
 }
 
@@ -296,8 +298,14 @@ void MainWindow::resultSetOutputCurrent(QString errorString)
 
 void MainWindow::resultGetOutputCurrent(qreal current, QString errorString)
 {
-    Q_UNUSED(errorString);
-    Q_UNUSED(current);
+    if (errorString != "")
+    {
+        showStatusText(errorString);
+    }
+    else
+    {
+        setOutputAmps(current);
+    }
 }
 
 void MainWindow::resultSetOutputVoltage(QString errorString)
@@ -307,8 +315,14 @@ void MainWindow::resultSetOutputVoltage(QString errorString)
 
 void MainWindow::resultGetOutputVoltage(qreal voltage, QString errorString)
 {
-    Q_UNUSED(errorString);
-    Q_UNUSED(voltage);
+    if (errorString != "")
+    {
+        showStatusText(errorString);
+    }
+    else
+    {
+        setOutputVolts(voltage);
+    }
 }
 
 void MainWindow::resultGetActualOutputCurrent(qreal current, QString errorString)
@@ -539,6 +553,30 @@ void MainWindow::setActualVolts(qreal value)
     ui->actualVoltsThousandths->display(thousandths);
 }
 
+void MainWindow::setOutputVolts(qreal value)
+{
+    int     tens;
+    int     ones;
+    int     tenths;
+    int     hundreths;
+    int     thousandths;
+
+    floatToDigits.floatToDigits(value, tens, ones, tenths, hundreths, thousandths);
+    voltsLcd.setValues(tens, ones, tenths, hundreths, thousandths);
+}
+
+void MainWindow::setOutputAmps(qreal value)
+{
+    int     tens;
+    int     ones;
+    int     tenths;
+    int     hundreths;
+    int     thousandths;
+
+    floatToDigits.floatToDigits(value, tens, ones, tenths, hundreths, thousandths);
+    ampsLcd.setValues(tens, ones, tenths, hundreths, thousandths);
+}
+
 void MainWindow::getSerialPorts()
 {
     Q_FOREACH(QSerialPortInfo port, QSerialPortInfo::availablePorts())
@@ -590,6 +628,7 @@ void MainWindow::makeConnections()
 
     connect(this, SIGNAL(psuOpenPort(QString)), &psuThread, SLOT(psuOpenPort(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuClosePort()), &psuThread, SLOT(psuClosePort()), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuSetOutputCurrent(qreal)), &psuThread, SLOT(psuSetOutputCurrent(qreal)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuGetOutputCurrent()), &psuThread, SLOT(psuGetOutputCurrent()), Qt::QueuedConnection);
     connect(this, SIGNAL(psuSetOutputVoltage(qreal)), &psuThread, SLOT(psuSetOutputVoltage(qreal)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuGetOutputVoltage()), &psuThread, SLOT(psuGetOutputVoltage()), Qt::QueuedConnection);
@@ -608,8 +647,10 @@ void MainWindow::makeConnections()
 
     connect(&psuThread, SIGNAL(resultOpenPort(QString)), this, SLOT(resultOpenPort(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultClosePort(QString)), this, SLOT(resultClosePort(QString)), Qt::QueuedConnection);
-    connect(&psuThread, SIGNAL(resultSetOutputVoltage(QString)), this, SLOT(resultSetOutputVoltage(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultGetOutputCurrent(qreal,QString)), this, SLOT(resultGetOutputCurrent(qreal,QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultSetOutputCurrent(QString)), this, SLOT(resultSetOutputCurrent(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultSetOutputVoltage(QString)), this, SLOT(resultSetOutputVoltage(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultGetOutputVoltage(qreal,QString)), this, SLOT(resultGetOutputVoltage(qreal,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultGetActualOutputCurrent(qreal,QString)), this, SLOT(resultGetActualOutputCurrent(qreal,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultGetActualOutputVoltage(qreal,QString)), this, SLOT(resultGetActualOutputVoltage(qreal,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultGetOutputEnable(QString)), this, SLOT(resultGetOutputEnable(QString)), Qt::QueuedConnection);
