@@ -454,6 +454,30 @@ void MainWindow::setConstantCurrent(bool constantCurrent)
     ui->constantVoltage->setChecked(!constantCurrent);
     ui->ampsApply->setEnabled(constantCurrent);
     ui->voltsApply->setEnabled(!constantCurrent);
+
+    ui->ampsTensUp->setEnabled(constantCurrent);
+    ui->ampsTensDown->setEnabled(constantCurrent);
+    ui->ampsOnesUp->setEnabled(constantCurrent);
+    ui->ampsOnesDown->setEnabled(constantCurrent);
+    ui->ampsTenthsUp->setEnabled(constantCurrent);
+    ui->ampsTenthsDown->setEnabled(constantCurrent);
+    ui->ampsHundrethsUp->setEnabled(constantCurrent);
+    ui->ampsHundrethsDown->setEnabled(constantCurrent);
+    ui->ampsThousandthsUp->setEnabled(constantCurrent);
+    ui->ampsThousandthsDown->setEnabled(constantCurrent);
+    ui->ampsReset->setEnabled(constantCurrent);
+
+    ui->voltsTensUp->setEnabled(!constantCurrent);
+    ui->voltsTensDown->setEnabled(!constantCurrent);
+    ui->voltsOnesUp->setEnabled(!constantCurrent);
+    ui->voltsOnesDown->setEnabled(!constantCurrent);
+    ui->voltsTenthsUp->setEnabled(!constantCurrent);
+    ui->voltsTenthsDown->setEnabled(!constantCurrent);
+    ui->voltsHundrethsUp->setEnabled(!constantCurrent);
+    ui->voltsHundrethsDown->setEnabled(!constantCurrent);
+    ui->voltsThousandthsUp->setEnabled(!constantCurrent);
+    ui->voltsThousandthsDown->setEnabled(!constantCurrent);
+    ui->voltsReset->setEnabled(!constantCurrent);
 }
 
 void MainWindow::setupLcds()

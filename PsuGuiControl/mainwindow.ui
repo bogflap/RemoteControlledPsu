@@ -86,7 +86,7 @@ Current</string>
           <item>
            <widget class="QPushButton" name="ampsTensUp">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="text">
              <string/>
@@ -120,6 +120,9 @@ Current</string>
           </item>
           <item>
            <widget class="QPushButton" name="ampsTensDown">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -136,7 +139,7 @@ Current</string>
           <item>
            <widget class="QPushButton" name="ampsOnesUp">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="text">
              <string/>
@@ -170,6 +173,9 @@ Current</string>
           </item>
           <item>
            <widget class="QPushButton" name="ampsOnesDown">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -202,7 +208,7 @@ Current</string>
           <item>
            <widget class="QPushButton" name="ampsTenthsUp">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="text">
              <string/>
@@ -236,6 +242,9 @@ Current</string>
           </item>
           <item>
            <widget class="QPushButton" name="ampsTenthsDown">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -252,7 +261,7 @@ Current</string>
           <item>
            <widget class="QPushButton" name="ampsHundrethsUp">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="text">
              <string/>
@@ -286,6 +295,9 @@ Current</string>
           </item>
           <item>
            <widget class="QPushButton" name="ampsHundrethsDown">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -301,6 +313,9 @@ Current</string>
          <layout class="QVBoxLayout" name="verticalLayout_11">
           <item>
            <widget class="QPushButton" name="ampsThousandthsUp">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -333,6 +348,9 @@ Current</string>
           </item>
           <item>
            <widget class="QPushButton" name="ampsThousandthsDown">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -383,6 +401,9 @@ Current</string>
           </item>
           <item>
            <widget class="QPushButton" name="ampsReset">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Reset</string>
             </property>
@@ -567,6 +588,9 @@ Voltage</string>
          <layout class="QVBoxLayout" name="verticalLayout_13">
           <item>
            <widget class="QPushButton" name="voltsTensUp">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -599,6 +623,9 @@ Voltage</string>
           </item>
           <item>
            <widget class="QPushButton" name="voltsTensDown">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -614,6 +641,9 @@ Voltage</string>
          <layout class="QVBoxLayout" name="verticalLayout_15">
           <item>
            <widget class="QPushButton" name="voltsOnesUp">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -646,6 +676,9 @@ Voltage</string>
           </item>
           <item>
            <widget class="QPushButton" name="voltsOnesDown">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -677,6 +710,9 @@ Voltage</string>
          <layout class="QVBoxLayout" name="verticalLayout_16">
           <item>
            <widget class="QPushButton" name="voltsTenthsUp">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -709,6 +745,9 @@ Voltage</string>
           </item>
           <item>
            <widget class="QPushButton" name="voltsTenthsDown">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -724,6 +763,9 @@ Voltage</string>
          <layout class="QVBoxLayout" name="verticalLayout_17">
           <item>
            <widget class="QPushButton" name="voltsHundrethsUp">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -756,6 +798,9 @@ Voltage</string>
           </item>
           <item>
            <widget class="QPushButton" name="voltsHundrethsDown">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -771,6 +816,9 @@ Voltage</string>
          <layout class="QVBoxLayout" name="verticalLayout_18">
           <item>
            <widget class="QPushButton" name="voltsThousandthsUp">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -803,6 +851,9 @@ Voltage</string>
           </item>
           <item>
            <widget class="QPushButton" name="voltsThousandthsDown">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -853,6 +904,9 @@ Voltage</string>
           </item>
           <item>
            <widget class="QPushButton" name="voltsReset">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Reset</string>
             </property>
