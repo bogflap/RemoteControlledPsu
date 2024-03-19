@@ -247,10 +247,6 @@ void MainWindow::ampsVoltsTimeout()
 
 void MainWindow::resultOpenPort(QString errorString)
 {
-    // Need to be able to close an open port
-    // Some messages say Port already open
-    ui->closeButton->setEnabled(true);
-
     if (!errorString.isEmpty())
     {
         showStatusText(errorString);
@@ -263,6 +259,10 @@ void MainWindow::resultOpenPort(QString errorString)
         ts << "Opened port " << ui->serialPort->currentText();
         showStatusText(text);
 
+        ui->openButton->setEnabled(false);
+        ui->closeButton->setEnabled(true);
+        ui->serialPort->setEnabled(false);
+
         // Opened device so get some information about it
         emit psuGetIdentification();
         emit psuGetStatus();
@@ -272,6 +272,16 @@ void MainWindow::resultOpenPort(QString errorString)
 void MainWindow::resultClosePort(QString errorString)
 {
     showStatusText(errorString);
+
+    QString text;
+    QTextStream ts(&text);
+
+    ts << "Closed port " << ui->serialPort->currentText();
+    showStatusText(text);
+
+    ui->openButton->setEnabled(true);
+    ui->closeButton->setEnabled(false);
+    ui->serialPort->setEnabled(true);
 
     if (quitting)
     {
