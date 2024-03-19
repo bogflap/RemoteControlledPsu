@@ -9,6 +9,8 @@ class PsuThread : public QObject
 
 public:
     explicit PsuThread(QObject *parent = nullptr);
+    qreal   getMaxCurrent();
+    qreal   getMaxVoltage();
 
 public slots:
     void    psuOpenPort(QString);

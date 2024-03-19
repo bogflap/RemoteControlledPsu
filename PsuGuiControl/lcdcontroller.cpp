@@ -9,11 +9,12 @@ lcdController::lcdController()
     pThousandths = nullptr;
 }
 
-void lcdController::setDigits(QLCDNumber *tens,
-                              QLCDNumber *ones,
-                              QLCDNumber *tenths,
-                              QLCDNumber *hundreths,
-                              QLCDNumber *thousandths)
+void lcdController::setDigits(QLCDNumber    *tens,
+                              QLCDNumber    *ones,
+                              QLCDNumber    *tenths,
+                              QLCDNumber    *hundreths,
+                              QLCDNumber    *thousandths,
+                              qreal         maxValue)
 {
     pTens = tens;
     pOnes = ones;
@@ -21,23 +22,17 @@ void lcdController::setDigits(QLCDNumber *tens,
     pHundreths = hundreths;
     pThousandths = thousandths;
 
-    iTens = 0;
-    iOnes = 0;
-    iTenths = 0;
-    iHundreths = 0;
-    iThousandths = 0;
+    iMaxValue = qFloor(maxValue);
+    fToD.floatToDigits(maxValue, iTens, iOnes, iTenths, iHundreths, iThousandths);
 
-    minTens = 0;
-    minOnes = 0;
-    minTenths = 0;
-    minHundreths = 0;
-    minThousandths = 0;
-
-    maxTens = 3;
-    maxOnes = 9;
-    maxTenths = 9;
-    maxHundreths = 9;
-    maxThousandths = 9;
+    if (!checkDigits(iTens, iOnes, iTenths, iHundreths, iThousandths))
+    {
+        iTens = 0;
+        iOnes = 0;
+        iTenths = 0;
+        iHundreths = 0;
+        iThousandths = 0;
+    }
 }
 
 void lcdController::setValues(int tens,
@@ -46,22 +41,25 @@ void lcdController::setValues(int tens,
                               int hundreths,
                               int thousandths)
 {
-    iTens = tens;
-    iOnes = ones;
-    iTenths = tenths;
-    iHundreths = hundreths;
-    iThousandths = thousandths;
+    if (checkDigits(tens, ones, tenths, hundreths, thousandths))
+    {
+        iTens = tens;
+        iOnes = ones;
+        iTenths = tenths;
+        iHundreths = hundreths;
+        iThousandths = thousandths;
 
-    pTens->display(iTens);
-    pOnes->display(iOnes);
-    pTenths->display(iTenths);
-    pHundreths->display(iHundreths);
-    pThousandths->display(iThousandths);
+        pTens->display(iTens);
+        pOnes->display(iOnes);
+        pTenths->display(iTenths);
+        pHundreths->display(iHundreths);
+        pThousandths->display(iThousandths);
+    }
 }
 
 void lcdController::upTens()
 {
-    if (iTens < maxTens)
+    if (checkDigits(iTens + 1, iOnes, iTenths, iHundreths, iThousandths))
     {
         iTens++;
         pTens->display(iTens);
@@ -70,7 +68,7 @@ void lcdController::upTens()
 
 void lcdController::downTens()
 {
-    if (iTens > minTens)
+    if (checkDigits(iTens - 1, iOnes, iTenths, iHundreths, iThousandths))
     {
         iTens--;
         pTens->display(iTens);
@@ -79,7 +77,7 @@ void lcdController::downTens()
 
 void lcdController::upOnes()
 {
-    if (iOnes < maxOnes)
+    if (checkDigits(iTens, iOnes + 1, iTenths, iHundreths, iThousandths))
     {
         iOnes++;
         pOnes->display(iOnes);
@@ -88,7 +86,7 @@ void lcdController::upOnes()
 
 void lcdController::downOnes()
 {
-    if (iOnes > minOnes)
+    if (checkDigits(iTens, iOnes - 1, iTenths, iHundreths, iThousandths))
     {
         iOnes--;
         pOnes->display(iOnes);
@@ -97,7 +95,7 @@ void lcdController::downOnes()
 
 void lcdController::upTenths()
 {
-    if (iTenths < maxTenths)
+    if (checkDigits(iTens, iOnes, iTenths + 1, iHundreths, iThousandths))
     {
         iTenths++;
         pTenths->display(iTenths);
@@ -106,7 +104,7 @@ void lcdController::upTenths()
 
 void lcdController::downTenths()
 {
-    if (iTenths > minTenths)
+    if (checkDigits(iTens, iOnes, iTenths - 1, iHundreths, iThousandths))
     {
         iTenths--;
         pTenths->display(iTenths);
@@ -115,7 +113,7 @@ void lcdController::downTenths()
 
 void lcdController::upHundreths()
 {
-    if (iHundreths < maxHundreths)
+    if (checkDigits(iTens, iOnes, iTenths, iHundreths + 1, iThousandths))
     {
         iHundreths++;
         pHundreths->display(iHundreths);
@@ -124,7 +122,7 @@ void lcdController::upHundreths()
 
 void lcdController::downHundreths()
 {
-    if (iHundreths > minHundreths)
+    if (checkDigits(iTens, iOnes, iTenths, iHundreths - 1, iThousandths))
     {
         iHundreths--;
         pHundreths->display(iHundreths);
@@ -133,7 +131,7 @@ void lcdController::downHundreths()
 
 void lcdController::upThousandths()
 {
-    if (iThousandths < maxThousandths)
+    if (checkDigits(iTens, iOnes, iTenths, iHundreths, iThousandths + 1))
     {
         iThousandths++;
         pThousandths->display(iThousandths);
@@ -142,9 +140,32 @@ void lcdController::upThousandths()
 
 void lcdController::downThousandths()
 {
-    if (iThousandths > minThousandths)
+    if (checkDigits(iTens, iOnes, iTenths, iHundreths, iThousandths - 1))
     {
         iThousandths--;
         pThousandths->display(iThousandths);
     }
+}
+
+bool lcdController::checkDigits(int tens, int ones, int tenths, int hundreths, int thousandths)
+{
+    bool    result = false;
+
+    if ((tens >= 0) && (ones >= 0) && (tenths >= 0) && (hundreths >= 0) && (thousandths >= 0))
+    {
+        if ((tens < 10) && (ones < 10) && (tenths < 10) && (hundreths < 10) && (thousandths < 10))
+        {
+            int     newValue;
+
+            newValue = (tens * 10000) + (ones * 1000) + (tenths * 100) + (hundreths * 10) + (thousandths * 1);
+            if (newValue <= iMaxValue)
+            {
+                result = true;
+            }
+        }
+    }
+
+    // Else do nothing
+
+    return result;
 }

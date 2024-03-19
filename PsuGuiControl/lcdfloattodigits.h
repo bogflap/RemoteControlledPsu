@@ -7,7 +7,7 @@ public:
     explicit lcdFloatToDigits();
 
     void    floatToDigits(  qreal value,
-                            int&tens,
+                            int& tens,
                             int& ones,
                             int& tenths,
                             int& hundreths,

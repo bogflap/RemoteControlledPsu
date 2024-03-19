@@ -11,6 +11,24 @@ PsuThread::PsuThread(QObject *parent)
 
 }
 
+qreal PsuThread::getMaxCurrent()
+{
+    qreal   maxMa;
+
+    gPsuControl.getMaximumCurrentMa(maxMa);
+
+    return maxMa;
+}
+
+qreal PsuThread::getMaxVoltage()
+{
+    qreal   maxMv;
+
+    gPsuControl.getMaximumVoltageMv(maxMv);
+
+    return maxMv;
+}
+
 void PsuThread::psuOpenPort(QString port)
 {
     QString errorText = "";

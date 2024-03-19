@@ -442,18 +442,23 @@ void MainWindow::setConstantCurrent(bool constantCurrent)
 
 void MainWindow::setupLcds()
 {
+    qreal   maxMa = psuThread.getMaxCurrent();
+    qreal   maxMv = psuThread.getMaxVoltage();
+
     ampsLcd.setDigits(ui->ampsTens,
                       ui->ampsOnes,
                       ui->ampsTenths,
                       ui->ampsHundreths,
-                      ui->ampsThousandths);
+                      ui->ampsThousandths,
+                      maxMa);
     ampsLcd.setValues(0, 0, 0, 0, 0);
 
     voltsLcd.setDigits(ui->voltsTens,
                        ui->voltsOnes,
                        ui->voltsTenths,
                        ui->voltsHundreths,
-                       ui->voltsThousandths);
+                       ui->voltsThousandths,
+                       maxMv);
     voltsLcd.setValues(0, 0, 0, 0, 0);
 
     setActualAmps(0.0);

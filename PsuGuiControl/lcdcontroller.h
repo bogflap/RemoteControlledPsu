@@ -3,16 +3,19 @@
 
 #include <QLCDNumber>
 
+#include "lcdfloattodigits.h"
+
 class lcdController
 {
 public:
-    lcdController();
+            lcdController();
 
-    void    setDigits(  QLCDNumber* tens,
+    void    setDigits(QLCDNumber*   tens,
                         QLCDNumber* ones,
                         QLCDNumber* tenths,
                         QLCDNumber* hundreths,
-                        QLCDNumber* thousandths);
+                        QLCDNumber* thousandths,
+                        qreal       maxValue);
     void    setValues(  int tens,
                         int ones,
                         int tenths,
@@ -30,6 +33,9 @@ public:
     void    downThousandths();
 
 private:
+    bool    checkDigits(int tens, int ones, int tenths, int hundreths, int thousandths);
+
+private:
     QLCDNumber* pTens;
     QLCDNumber* pOnes;
     QLCDNumber* pTenths;
@@ -41,18 +47,9 @@ private:
     int         iTenths;
     int         iHundreths;
     int         iThousandths;
+    int         iMaxValue;
 
-    int         minTens;
-    int         minOnes;
-    int         minTenths;
-    int         minHundreths;
-    int         minThousandths;
-
-    int         maxTens;
-    int         maxOnes;
-    int         maxTenths;
-    int         maxHundreths;
-    int         maxThousandths;
+    lcdFloatToDigits    fToD;
 };
 
 #endif // LCDCONTROLLER_H
