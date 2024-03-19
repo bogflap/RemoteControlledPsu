@@ -1082,6 +1082,13 @@ Output</string>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Identification</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="identification">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1090,21 +1097,35 @@ Output</string>
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Identification = </string>
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Mode</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="mode">
           <property name="text">
-           <string>Mode =</string>
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Output Enabled</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="outputEnabled">
           <property name="text">
-           <string>Output enabled = </string>
+           <string/>
           </property>
          </widget>
         </item>
