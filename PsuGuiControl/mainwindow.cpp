@@ -42,6 +42,8 @@ void MainWindow::closeClicked(bool checked)
 {
     Q_UNUSED(checked);
 
+    ampsVoltsTimer.stop();
+
     emit psuClosePort();
 }
 
