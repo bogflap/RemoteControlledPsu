@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Layer_1"
+   data-name="Layer 1"
+   viewBox="0 0 122.88 122.88"
+   version="1.1"
+   sodipodi:docname="turn-off-icon.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <metadata
+     id="metadata17">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>turn-on</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     id="namedview15"
+     showgrid="false"
+     inkscape:zoom="5.818685"
+     inkscape:cx="61.439999"
+     inkscape:cy="61.439999"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Layer_1" />
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1{fill:#01a437;}.cls-1,.cls-3{fill-rule:evenodd;}.cls-2{fill:#fff;}.cls-3{fill:#42c76e;}</style>
+    <filter
+       inkscape:label="Soft Colors"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Adds a colorizable edges glow inside objects and pictures"
+       style="color-interpolation-filters:sRGB;"
+       id="filter39">
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         result="result91"
+         id="feColorMatrix19" />
+      <feComposite
+         in2="result91"
+         result="result15"
+         operator="arithmetic"
+         k2="0.4"
+         k1="0.3"
+         k3="0.3"
+         id="feComposite21" />
+      <feGaussianBlur
+         in="result15"
+         result="result8"
+         stdDeviation="5"
+         id="feGaussianBlur23" />
+      <feColorMatrix
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 50 0 "
+         id="feColorMatrix25" />
+      <feComposite
+         in2="SourceGraphic"
+         operator="in"
+         result="result13"
+         id="feComposite27" />
+      <feComposite
+         in2="result13"
+         k3="0.3"
+         k1="0.3"
+         k2="0.4"
+         operator="arithmetic"
+         in="result15"
+         result="result6"
+         id="feComposite29" />
+      <feFlood
+         flood-color="rgb(128,172,0)"
+         flood-opacity="1"
+         result="result10"
+         id="feFlood31" />
+      <feBlend
+         in2="result10"
+         result="result12"
+         in="result6"
+         mode="darken"
+         id="feBlend33" />
+      <feBlend
+         in2="result6"
+         result="result14"
+         mode="screen"
+         id="feBlend35" />
+      <feComposite
+         in2="SourceGraphic"
+         in="result14"
+         operator="in"
+         id="feComposite37" />
+    </filter>
+  </defs>
+  <title
+     id="title6">turn-on</title>
+  <path
+     class="cls-1"
+     d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z"
+     id="path8"
+     style="fill:#ff0000" />
+  <path
+     class="cls-2"
+     d="M81,44.75a7.08,7.08,0,0,1,10.71-9.27,40,40,0,1,1-60.87.39A7.07,7.07,0,0,1,41.67,45,25.85,25.85,0,1,0,81,44.75ZM68.54,47.92a7.1,7.1,0,1,1-14.2,0V26.74a7.1,7.1,0,1,1,14.2,0V47.92Z"
+     id="path10" />
+  <path
+     class="cls-3"
+     d="M61.44,2.23a59.15,59.15,0,0,1,59.15,59.15c0,.77,0,1.54,0,2.31a59.14,59.14,0,0,0-118.2,0c0-.77,0-1.54,0-2.31A59.15,59.15,0,0,1,61.44,2.23Z"
+     id="path12"
+     style="filter:url(#filter39);fill:#ffd5d5" />
+</svg>
