@@ -46,7 +46,7 @@ void MainWindow::closeClicked(bool checked)
     Q_UNUSED(checked);
 
     ampsVoltsTimer.stop();
-    setEnableOutputColour(false);
+    setEnableOutputColour(true);
 
     emit psuClosePort();
 }
