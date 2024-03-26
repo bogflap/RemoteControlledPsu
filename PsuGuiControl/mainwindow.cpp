@@ -4,9 +4,11 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    ampsVoltsTimer(parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
+    , ampsVoltsTimer(parent)
+    , outputEnabledStyle(QString::fromUtf8("background-color: rgb(255, 0, 0);"))
+    , outputDisabledStyle(QString::fromUtf8("background-color: rgb(0, 255, 0);"))
 {
     ui->setupUi(this);
 
@@ -18,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     setupLcds();
     makeConnections();
     getSerialPorts();
+    setEnableOutputColour(true);
 }
 
 MainWindow::~MainWindow()
@@ -143,6 +146,24 @@ void MainWindow::ampsThousandthsDownClicked(bool checked)
 void MainWindow::ampsApplyClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    qreal   currentMa;
+
+    int     tens        = ui->ampsTens->intValue();
+    int     ones        = ui->ampsTens->intValue();
+    int     tenths      = ui->ampsTens->intValue();
+    int     hundreths   = ui->ampsTens->intValue();
+    int     thousandths = ui->ampsTens->intValue();
+
+    currentMa = digitsToFloat.digitsToFloat(tens,
+                                            ones,
+                                            tenths,
+                                            hundreths,
+                                            thousandths);
+
+    currentMa /= 1000.0;
+
+    emit psuSetOutputCurrent(currentMa);
 }
 
 void MainWindow::ampsResetClicked(bool checked)
@@ -293,7 +314,10 @@ void MainWindow::resultClosePort(QString errorString)
 
 void MainWindow::resultSetOutputCurrent(QString errorString)
 {
-    Q_UNUSED(errorString);
+    if (errorString != "")
+    {
+        showStatusText(errorString);
+    }
 }
 
 void MainWindow::resultGetOutputCurrent(qreal current, QString errorString)
@@ -448,6 +472,7 @@ void MainWindow::resultIsOutputEnabled(bool result, QString errorString)
     }
     else
     {
+        setEnableOutputColour(!result);
         ui->enableOutput->setEnabled(result);
         ampsVoltsTimer.start(1000);
     }
@@ -575,6 +600,18 @@ void MainWindow::setOutputAmps(qreal value)
 
     floatToDigits.floatToDigits(value, tens, ones, tenths, hundreths, thousandths);
     ampsLcd.setValues(tens, ones, tenths, hundreths, thousandths);
+}
+
+void MainWindow::setEnableOutputColour(bool bOutputEnabled)
+{
+    if (bOutputEnabled)
+    {
+        ui->enableOutput->setStyleSheet(outputDisabledStyle);
+    }
+    else
+    {
+        ui->enableOutput->setStyleSheet(outputEnabledStyle);
+    }
 }
 
 void MainWindow::getSerialPorts()

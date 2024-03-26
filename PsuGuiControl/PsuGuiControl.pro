@@ -10,16 +10,20 @@ CONFIG += c++17
 
 SOURCES += \
     lcdcontroller.cpp \
+    lcddigitstofloat.cpp \
     lcdfloattodigits.cpp \
     main.cpp \
     mainwindow.cpp \
-    psuThread.cpp
+    psuThread.cpp \
+    resizingpushbutton.cpp
 
 HEADERS += \
     lcdcontroller.h \
+    lcddigitstofloat.h \
     lcdfloattodigits.h \
     mainwindow.h \
-    psuThread.h
+    psuThread.h \
+    resizingpushbutton.h
 
 FORMS += \
     mainwindow.ui

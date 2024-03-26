@@ -9,6 +9,7 @@
 #include "psuThread.h"
 #include "lcdcontroller.h"
 #include "lcdfloattodigits.h"
+#include "lcddigitstofloat.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -122,6 +123,7 @@ private:
     void    setActualVolts(qreal value);
     void    setOutputVolts(qreal value);
     void    setOutputAmps(qreal value);
+    void    setEnableOutputColour(bool bOutputEnabled);
 
 
 private:
@@ -133,5 +135,8 @@ private:
     lcdController       ampsLcd;
     lcdController       voltsLcd;
     lcdFloatToDigits    floatToDigits;
+    lcdDigitsToFloat    digitsToFloat;
+    QString             outputEnabledStyle;
+    QString             outputDisabledStyle;
 };
 #endif // MAINWINDOW_H

@@ -10,6 +10,12 @@
     <height>545</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -1079,55 +1085,26 @@ Voltage</string>
     <item row="1" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_7">
       <item>
-       <spacer name="horizontalSpacer_6">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="enableOutput">
+       <widget class="ResizingPushButton" name="enableOutput">
         <property name="enabled">
          <bool>false</bool>
         </property>
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="font">
          <font>
-          <pointsize>32</pointsize>
+          <pointsize>24</pointsize>
          </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(85, 170, 0);</string>
         </property>
         <property name="text">
          <string>Enable
 Output</string>
         </property>
        </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_7">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </item>
@@ -1172,7 +1149,7 @@ Output</string>
         <item>
          <widget class="QLabel" name="label_6">
           <property name="text">
-           <string>Output Enabled</string>
+           <string>Output</string>
           </property>
          </widget>
         </item>
@@ -1198,25 +1175,19 @@ Output</string>
         </item>
        </layout>
       </item>
-      <item>
-       <spacer name="horizontalSpacer_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
      </layout>
     </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ResizingPushButton</class>
+   <extends>QPushButton</extends>
+   <header>resizingpushbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="Resources/resources.qrc"/>
  </resources>

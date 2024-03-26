@@ -60,7 +60,14 @@ void PsuThread::psuClosePort()
 
 void PsuThread::psuSetOutputCurrent(qreal current)
 {
-    Q_UNUSED(current);
+    QString error("");
+
+    if (gPsuControl.setCurrent(current))
+    {
+        gPsuControl.getError(error);
+    }
+
+    emit resultSetOutputCurrent(error);
 }
 
 void PsuThread::psuGetOutputCurrent()

@@ -10,7 +10,7 @@ class lcdController
 public:
             lcdController();
 
-    void    setDigits(QLCDNumber*   tens,
+    void    setDigits(  QLCDNumber* tens,
                         QLCDNumber* ones,
                         QLCDNumber* tenths,
                         QLCDNumber* hundreths,
