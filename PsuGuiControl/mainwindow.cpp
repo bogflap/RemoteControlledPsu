@@ -46,6 +46,7 @@ void MainWindow::closeClicked(bool checked)
     Q_UNUSED(checked);
 
     ampsVoltsTimer.stop();
+    setEnableOutputColour(false);
 
     emit psuClosePort();
 }
@@ -150,10 +151,10 @@ void MainWindow::ampsApplyClicked(bool checked)
     qreal   currentMa;
 
     int     tens        = ui->ampsTens->intValue();
-    int     ones        = ui->ampsTens->intValue();
-    int     tenths      = ui->ampsTens->intValue();
-    int     hundreths   = ui->ampsTens->intValue();
-    int     thousandths = ui->ampsTens->intValue();
+    int     ones        = ui->ampsOnes->intValue();
+    int     tenths      = ui->ampsTenths->intValue();
+    int     hundreths   = ui->ampsHundreths->intValue();
+    int     thousandths = ui->ampsThousandths->intValue();
 
     currentMa = digitsToFloat.digitsToFloat(tens,
                                             ones,
@@ -181,6 +182,24 @@ void MainWindow::constantVoltageToggled(bool checked)
 void MainWindow::voltsApplyClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    qreal   voltsMv;
+
+    int     tens        = ui->voltsTens->intValue();
+    int     ones        = ui->voltsOnes->intValue();
+    int     tenths      = ui->voltsTenths->intValue();
+    int     hundreths   = ui->voltsHundreths->intValue();
+    int     thousandths = ui->voltsThousandths->intValue();
+
+    voltsMv = digitsToFloat.digitsToFloat(tens,
+                                            ones,
+                                            tenths,
+                                            hundreths,
+                                            thousandths);
+
+    voltsMv /= 1000.0;
+
+    emit psuSetOutputVoltage(voltsMv);
 }
 
 void MainWindow::voltsResetClicked(bool checked)
@@ -334,7 +353,10 @@ void MainWindow::resultGetOutputCurrent(qreal current, QString errorString)
 
 void MainWindow::resultSetOutputVoltage(QString errorString)
 {
-    Q_UNUSED(errorString);
+    if (errorString != "")
+    {
+        showStatusText(errorString);
+    }
 }
 
 void MainWindow::resultGetOutputVoltage(qreal voltage, QString errorString)
@@ -648,6 +670,7 @@ void MainWindow::makeConnections()
     connect(ui->ampsHundrethsDown, SIGNAL(clicked(bool)), this, SLOT(ampsHundrethsDownClicked(bool)));
     connect(ui->ampsThousandthsUp, SIGNAL(clicked(bool)), this, SLOT(ampsThousandthsUpClicked(bool)));
     connect(ui->ampsThousandthsDown, SIGNAL(clicked(bool)), this, SLOT(ampsThousandthsDownClicked(bool)));
+    connect(ui->ampsApply, SIGNAL(clicked(bool)), this, SLOT(ampsApplyClicked(bool)));
     connect(ui->ampsReset, SIGNAL(clicked(bool)), this, SLOT(ampsResetClicked(bool)));
 
     connect(ui->constantVoltage, SIGNAL(toggled(bool)), this, SLOT(constantVoltageToggled(bool)));
@@ -661,6 +684,7 @@ void MainWindow::makeConnections()
     connect(ui->voltsHundrethsDown, SIGNAL(clicked(bool)), this, SLOT(voltsHundrethsDownClicked(bool)));
     connect(ui->voltsThousandthsUp, SIGNAL(clicked(bool)), this, SLOT(voltsThousandthsUpClicked(bool)));
     connect(ui->voltsThousandthsDown, SIGNAL(clicked(bool)), this, SLOT(voltsThousandthsDownClicked(bool)));
+    connect(ui->voltsApply, SIGNAL(clicked(bool)), this, SLOT(voltsApplyClicked(bool)));
     connect(ui->voltsReset, SIGNAL(clicked(bool)), this, SLOT(voltsResetClicked(bool)));
 
     connect(this, SIGNAL(psuOpenPort(QString)), &psuThread, SLOT(psuOpenPort(QString)), Qt::QueuedConnection);

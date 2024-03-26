@@ -86,7 +86,14 @@ void PsuThread::psuGetOutputCurrent()
 
 void PsuThread::psuSetOutputVoltage(qreal voltage)
 {
-    Q_UNUSED(voltage);
+    QString error("");
+
+    if (gPsuControl.setVoltage(voltage))
+    {
+        gPsuControl.getError(error);
+    }
+
+    emit resultSetOutputVoltage(error);
 }
 
 void PsuThread::psuGetOutputVoltage()
