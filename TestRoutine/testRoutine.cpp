@@ -1,6 +1,6 @@
 #include <QCoreApplication>
 
-#include "psucontol.h"
+#include "psucontrol.h"
 
 QTextStream gOutText = QTextStream(stdout);
 PsuContol   gPsuControl;

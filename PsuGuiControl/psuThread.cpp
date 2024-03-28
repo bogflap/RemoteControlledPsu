@@ -1,7 +1,7 @@
 #include <QDebug>
 
 #include "psuThread.h"
-#include "psucontol.h"
+#include "psucontrol.h"
 
 PsuContol   gPsuControl;
 
@@ -141,6 +141,10 @@ void PsuThread::psuGetActualOutputVoltage()
 void PsuThread::psuSetOutputEnable(bool enable)
 {
     Q_UNUSED(enable);
+
+    QString error("Not implemented");
+
+    emit resultSetOutputEnable(error);
 }
 
 void PsuThread::psuGetStatus()
@@ -174,21 +178,40 @@ void PsuThread::psuGetIdentification()
 void PsuThread::psuRecallPanelSetting(int number)
 {
     Q_UNUSED(number);
+
+    QString error("Not implemented");
+
+    emit resultRecallPanelSetting(number, error);
 }
 
 void PsuThread::psuSavePanelSetting(int number)
 {
     Q_UNUSED(number);
+
+    QString error("Not implemented");
+
+    emit resultSavePanelSetting(error);
 }
 
 void PsuThread::psuSetOverCurrentProtection(bool enable)
 {
-    Q_UNUSED(enable);
+    QString error("");
+
+    if (!gPsuControl.setOverCurrentProtection(enable))
+    {
+        gPsuControl.getError(error);
+    }
+
+    emit resultSetOverCurrentProtection(error);
 }
 
 void PsuThread::psuSetKeyboardLock(bool enable)
 {
     Q_UNUSED(enable);
+
+    QString error("Not implemented");
+
+    emit resultSetKeyboardLock(error);
 }
 
 void PsuThread::psuIsConstantCurrent()

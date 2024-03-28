@@ -57,13 +57,14 @@ void Params_72_2710::getActualVoltageCommand(QByteArray &command)
 
 void Params_72_2710::getSetCurrentCommand(QByteArray &command, double_t current)
 {
-    Q_UNUSED(command);
-    Q_UNUSED(current);
+    QString localCommand = QString("ISET1:%1").arg(current, 0, 'f', 2);
+    command = localCommand.toUtf8();
 }
 
 void Params_72_2710::getReadCurrentCommand(QByteArray &command)
 {
-    Q_UNUSED(command);
+    QString localCommand = QString("ISET1?");
+    command = localCommand.toUtf8();
 }
 
 void Params_72_2710::getActualCurrentCommand(QByteArray &command)
@@ -74,32 +75,57 @@ void Params_72_2710::getActualCurrentCommand(QByteArray &command)
 
 void Params_72_2710::getOverCurrentProtectionCommand(QByteArray &command, bool &enable)
 {
-    Q_UNUSED(command);
-    Q_UNUSED(enable);
+    QString localCommand;
+
+    if (enable)
+    {
+        localCommand = QString("OCP1");
+    }
+    else
+    {
+        localCommand = QString("OCP0");
+    }
+    command = localCommand.toUtf8();
 }
 
-void Params_72_2710::getEnableOutCommand(QByteArray &command, bool &enable)
+void Params_72_2710::setEnableOutCommand(QByteArray &command, bool &enable)
 {
-    Q_UNUSED(command);
-    Q_UNUSED(enable);
+    QString localCommand;
 
+    if (enable)
+    {
+        localCommand = QString("OUT1");
+    }
+    else
+    {
+        localCommand = QString("OUT0");
+    }
+    command = localCommand.toUtf8();
+ }
+
+void Params_72_2710::setRecallPanelSettingsCommand(QByteArray &command, int &setting)
+{
+    QString localCommand = QString("RCL%1").arg(setting);
+    command = localCommand.toUtf8();
 }
 
-void Params_72_2710::getRecallPanelSettingsCommand(QByteArray &command, int &setting)
+void Params_72_2710::setSavePanelSettingsCommand(QByteArray &command, int &setting)
 {
-    Q_UNUSED(command);
-    Q_UNUSED(setting);
+    QString localCommand = QString("SAV%1").arg(setting);
+    command = localCommand.toUtf8();
 }
 
-void Params_72_2710::getSavePanelSettingsCommand(QByteArray &command, int &setting)
+void Params_72_2710::setKeyboardLockCommand(QByteArray &command, bool &enable)
 {
-    Q_UNUSED(command);
-    Q_UNUSED(setting);
-}
+    QString localCommand;
 
-void Params_72_2710::getKeyboardLockCommand(QByteArray &command, bool &enable)
-{
-
-    Q_UNUSED(command);
-    Q_UNUSED(enable);
+    if (enable)
+    {
+        localCommand = QString("LOCK1");
+    }
+    else
+    {
+        localCommand = QString("LOCK0");
+    }
+    command = localCommand.toUtf8();
 }

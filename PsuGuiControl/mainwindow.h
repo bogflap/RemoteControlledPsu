@@ -62,6 +62,7 @@ public slots:
     void    resultGetIdentification(QString, QString);
     void    resultRecallPanelSetting(int, QString);
     void    resultSavePanelSetting(QString);
+    void    resultSetOutputEnable(QString);
     void    resultSetOverCurrentProtection(QString);
     void    resultSetKeyboardLock(QString);
     void    resultIsConstantCurrent(bool, QString);
@@ -82,7 +83,6 @@ private slots:
 
     void    serialPortActivated(int);
 
-    void    constantCurrentToggled(bool);
     void    ampsTensUpClicked(bool);
     void    ampsTensDownClicked(bool);
     void    ampsOnesUpClicked(bool);
@@ -97,7 +97,6 @@ private slots:
     void    ampsApplyClicked(bool);
     void    ampsResetClicked(bool);
 
-    void    constantVoltageToggled(bool);
     void    voltsApplyClicked(bool);
     void    voltsResetClicked(bool);
     void    voltsTensUpClicked(bool);
@@ -117,14 +116,13 @@ private slots:
 
 private:
     void    showStatusText(QString text);
-    void    setConstantCurrent(bool constantCurrent);
     void    setupLcds();
+    void    AmpsVoltsEnable(bool enable);
     void    setActualAmps(qreal value);
     void    setActualVolts(qreal value);
     void    setOutputVolts(qreal value);
     void    setOutputAmps(qreal value);
     void    setEnableOutputColour(bool bOutputEnabled);
-
 
 private:
     Ui::MainWindow      *ui;

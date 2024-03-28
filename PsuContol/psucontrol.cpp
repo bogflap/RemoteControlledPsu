@@ -2,7 +2,7 @@
 #include <QTextStream>
 #include <QTime>
 
-#include "psucontol.h"
+#include "psucontrol.h"
 #include "Params_72_2710.h"
 
 Q_GLOBAL_STATIC(QSerialPort, serialPort);
@@ -144,14 +144,14 @@ bool PsuContol::readCurrent(qreal &current)
     Q_UNUSED(current);
     bool    result = true;
 
-    return result;
+        return result;
 }
 
 bool PsuContol::setCurrent(qreal mCurrent)
 {
     bool    result = false;
 
-    if (mCurrent > psuParams->getMaxCurrentMa())
+    if ((mCurrent * 1000.0) > psuParams->getMaxCurrentMa())
     {
         QTextStream ts(&lastError);
 
@@ -169,6 +169,10 @@ bool PsuContol::setCurrent(qreal mCurrent)
         psuParams->getSetCurrentCommand(command, mCurrent);
         result = sendCommand(command);
     }
+
+    // Anything that does not return a value requires a wait because it screws
+    // up the PSU controller if we fire things at it to quickly
+    waitForMilliSeconds(50);
 
     return result;
 }
@@ -207,8 +211,19 @@ bool PsuContol::actualCurrent(qreal &current)
 
 bool PsuContol::setOverCurrentProtection(bool &enable)
 {
-    Q_UNUSED(enable);
-    bool    result = true;
+    QByteArray  command;
+
+    bool        result = true;
+
+    psuParams->getOverCurrentProtectionCommand(command, enable);
+    if (!sendCommand(command))
+    {
+        result = false;
+    }
+
+    // Anything that does not return a value requires a wait because it screws
+    // up the PSU controller if we fire things at it to quickly
+    waitForMilliSeconds(50);
 
     return result;
 }
@@ -249,7 +264,7 @@ bool PsuContol::setVoltage(qreal mVoltage)
 {
     bool    result = false;
 
-    if (mVoltage > psuParams->getMaxVoltageMv())
+    if ((mVoltage * 1000.0) > psuParams->getMaxVoltageMv())
     {
         QTextStream ts(&lastError);
 
@@ -267,6 +282,10 @@ bool PsuContol::setVoltage(qreal mVoltage)
         psuParams->getSetVoltageCommand(command, mVoltage);
         result = sendCommand(command);
     }
+
+    // Anything that does not return a value requires a wait because it screws
+    // up the PSU controller if we fire things at it to quickly
+    waitForMilliSeconds(50);
 
     return result;
 }
@@ -416,6 +435,10 @@ bool PsuContol::setOverVoltageProtection(bool &enable)
     Q_UNUSED(enable);
     bool    result = true;
 
+    // Anything that does not return a value requires a wait because it screws
+    // up the PSU controller if we fire things at it to quickly
+    waitForMilliSeconds(50);
+
     return result;
 }
 
@@ -423,6 +446,10 @@ bool PsuContol::setBeep(bool &enable)
 {
     Q_UNUSED(enable);
     bool    result = true;
+
+    // Anything that does not return a value requires a wait because it screws
+    // up the PSU controller if we fire things at it to quickly
+    waitForMilliSeconds(50);
 
     return result;
 }
@@ -432,6 +459,10 @@ bool PsuContol::setChannelOutput(bool &enable)
     Q_UNUSED(enable);
     bool    result = true;
 
+    // Anything that does not return a value requires a wait because it screws
+    // up the PSU controller if we fire things at it to quickly
+    waitForMilliSeconds(50);
+
     return result;
 }
 
@@ -439,6 +470,10 @@ bool PsuContol::setPanelLock(bool &enable)
 {
     Q_UNUSED(enable);
     bool    result = true;
+
+    // Anything that does not return a value requires a wait because it screws
+    // up the PSU controller if we fire things at it to quickly
+    waitForMilliSeconds(50);
 
     return result;
 }
@@ -448,6 +483,10 @@ bool PsuContol::saveConfiguration(int number)
     Q_UNUSED(number);
     bool    result = true;
 
+    // Anything that does not return a value requires a wait because it screws
+    // up the PSU controller if we fire things at it to quickly
+    waitForMilliSeconds(50);
+
     return result;
 }
 
@@ -455,6 +494,10 @@ bool PsuContol::recallConfiguration(int number)
 {
     Q_UNUSED(number);
     bool    result = true;
+
+    // Anything that does not return a value requires a wait because it screws
+    // up the PSU controller if we fire things at it to quickly
+    waitForMilliSeconds(50);
 
     return result;
 }

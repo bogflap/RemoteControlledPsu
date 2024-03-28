@@ -33,14 +33,14 @@ public:
     void        getOverCurrentProtectionCommand(QByteArray& command, bool& enable);
 
     // Enable output
-    void        getEnableOutCommand(QByteArray& command, bool& enable);
+    void        setEnableOutCommand(QByteArray& command, bool& enable);
 
     // Panel setting commands
-    void        getRecallPanelSettingsCommand(QByteArray& command, int& setting);
-    void        getSavePanelSettingsCommand(QByteArray& command, int& setting);
+    void        setRecallPanelSettingsCommand(QByteArray& command, int& setting);
+    void        setSavePanelSettingsCommand(QByteArray& command, int& setting);
 
     // Keyboard lock command
-    void        getKeyboardLockCommand(QByteArray& command, bool& enable);
+    void        setKeyboardLockCommand(QByteArray& command, bool& enable);
 };
 
 #endif // PARAMS_72_2710_H

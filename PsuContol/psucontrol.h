@@ -4,8 +4,8 @@
 //
 //#############################################################################
 
-#ifndef PSUCONTOL_H
-#define PSUCONTOL_H
+#ifndef PSUCONTROL_H
+#define PSUCONTROL_H
 
 #include <QTextStream>
 
@@ -72,4 +72,4 @@ private:
     QString lastError;
 };
 
-#endif // PSUCONTOL_H
+#endif // PSUCONTROL_H

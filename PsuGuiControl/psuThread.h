@@ -46,6 +46,7 @@ signals:
     void    resultGetIdentification(QString, QString);
     void    resultRecallPanelSetting(int, QString);
     void    resultSavePanelSetting(QString);
+    void    resultSetOutputEnable(QString);
     void    resultSetOverCurrentProtection(QString);
     void    resultSetKeyboardLock(QString);
     void    resultIsConstantCurrent(bool, QString);

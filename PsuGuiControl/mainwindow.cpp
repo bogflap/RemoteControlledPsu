@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     quitting = false;
 
+    ampsVoltsTimer.setInterval(1000);
+    ampsVoltsTimer.setSingleShot(false);
+
     setupLcds();
     makeConnections();
     getSerialPorts();
@@ -47,6 +50,7 @@ void MainWindow::closeClicked(bool checked)
 
     ampsVoltsTimer.stop();
     setEnableOutputColour(true);
+    AmpsVoltsEnable(false);
 
     emit psuClosePort();
 }
@@ -54,6 +58,10 @@ void MainWindow::closeClicked(bool checked)
 void MainWindow::quitClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    ampsVoltsTimer.stop();
+    setEnableOutputColour(true);
+    AmpsVoltsEnable(false);
 
     quitting = true;
 
@@ -67,11 +75,6 @@ void MainWindow::enableOutputClicked(bool checked)
 void MainWindow::serialPortActivated(int index)
 {
     Q_UNUSED(index);
-}
-
-void MainWindow::constantCurrentToggled(bool checked)
-{
-    Q_UNUSED(checked);
 }
 
 void MainWindow::ampsTensUpClicked(bool checked)
@@ -172,11 +175,6 @@ void MainWindow::ampsResetClicked(bool checked)
     Q_UNUSED(checked);
 
     ampsLcd.setValues(0, 0, 0, 0, 0);
-}
-
-void MainWindow::constantVoltageToggled(bool checked)
-{
-    Q_UNUSED(checked);
 }
 
 void MainWindow::voltsApplyClicked(bool checked)
@@ -448,9 +446,20 @@ void MainWindow::resultSavePanelSetting(QString errorString)
     Q_UNUSED(errorString);
 }
 
+void MainWindow::resultSetOutputEnable(QString errorString)
+{
+    if (errorString != "")
+    {
+        showStatusText(errorString);
+    }
+}
+
 void MainWindow::resultSetOverCurrentProtection(QString errorString)
 {
-    Q_UNUSED(errorString);
+    if (errorString != "")
+    {
+        showStatusText(errorString);
+    }
 }
 
 void MainWindow::resultSetKeyboardLock(QString errorString)
@@ -466,9 +475,14 @@ void MainWindow::resultIsConstantCurrent(bool result, QString errorString)
     }
     else
     {
-        ui->constantCurrent->setEnabled(true);
-        ui->constantVoltage->setEnabled(true);
-        setConstantCurrent(result);
+        if (result)
+        {
+            ui->mode->setText("CC Mode");
+        }
+        else
+        {
+            ui->mode->setText("CV Mode");
+        }
     }
 }
 
@@ -480,9 +494,14 @@ void MainWindow::resultIsConstantVoltage(bool result, QString errorString)
     }
     else
     {
-        ui->constantCurrent->setEnabled(true);
-        ui->constantVoltage->setEnabled(true);
-        setConstantCurrent(!result);
+        if (result)
+        {
+            ui->mode->setText("CV Mode");
+        }
+        else
+        {
+            ui->mode->setText("CC Mode");
+        }
     }
 }
 
@@ -496,7 +515,20 @@ void MainWindow::resultIsOutputEnabled(bool result, QString errorString)
     {
         setEnableOutputColour(!result);
         ui->enableOutput->setEnabled(result);
-        ampsVoltsTimer.start(1000);
+
+        // If output enabled then clicking this button will disable the output
+        // and ice versa
+        if (result)
+        {
+            ui->enableOutput->setText("Disable\nOutput");
+        }
+        else
+        {
+            ui->enableOutput->setText("Enable\nOutput");
+        }
+
+        AmpsVoltsEnable(true);
+        ampsVoltsTimer.start();
     }
 }
 
@@ -506,39 +538,6 @@ void MainWindow::showStatusText(QString text)
     {
         ui->statusbar->showMessage(text);
     }
-}
-
-void MainWindow::setConstantCurrent(bool constantCurrent)
-{
-    // It is either constant current or constant voltage
-    ui->constantCurrent->setChecked(constantCurrent);
-    ui->constantVoltage->setChecked(!constantCurrent);
-    ui->ampsApply->setEnabled(constantCurrent);
-    ui->voltsApply->setEnabled(!constantCurrent);
-
-    ui->ampsTensUp->setEnabled(constantCurrent);
-    ui->ampsTensDown->setEnabled(constantCurrent);
-    ui->ampsOnesUp->setEnabled(constantCurrent);
-    ui->ampsOnesDown->setEnabled(constantCurrent);
-    ui->ampsTenthsUp->setEnabled(constantCurrent);
-    ui->ampsTenthsDown->setEnabled(constantCurrent);
-    ui->ampsHundrethsUp->setEnabled(constantCurrent);
-    ui->ampsHundrethsDown->setEnabled(constantCurrent);
-    ui->ampsThousandthsUp->setEnabled(constantCurrent);
-    ui->ampsThousandthsDown->setEnabled(constantCurrent);
-    ui->ampsReset->setEnabled(constantCurrent);
-
-    ui->voltsTensUp->setEnabled(!constantCurrent);
-    ui->voltsTensDown->setEnabled(!constantCurrent);
-    ui->voltsOnesUp->setEnabled(!constantCurrent);
-    ui->voltsOnesDown->setEnabled(!constantCurrent);
-    ui->voltsTenthsUp->setEnabled(!constantCurrent);
-    ui->voltsTenthsDown->setEnabled(!constantCurrent);
-    ui->voltsHundrethsUp->setEnabled(!constantCurrent);
-    ui->voltsHundrethsDown->setEnabled(!constantCurrent);
-    ui->voltsThousandthsUp->setEnabled(!constantCurrent);
-    ui->voltsThousandthsDown->setEnabled(!constantCurrent);
-    ui->voltsReset->setEnabled(!constantCurrent);
 }
 
 void MainWindow::setupLcds()
@@ -564,6 +563,35 @@ void MainWindow::setupLcds()
 
     setActualAmps(0.0);
     setActualVolts(0.0);
+}
+
+void MainWindow::AmpsVoltsEnable(bool enable)
+{
+    ui->ampsTensUp->setEnabled(enable);
+    ui->ampsTensDown->setEnabled(enable);
+    ui->ampsOnesUp->setEnabled(enable);
+    ui->ampsOnesDown->setEnabled(enable);
+    ui->ampsTenthsUp->setEnabled(enable);
+    ui->ampsTenthsDown->setEnabled(enable);
+    ui->ampsHundrethsUp->setEnabled(enable);
+    ui->ampsHundrethsDown->setEnabled(enable);
+    ui->ampsThousandthsUp->setEnabled(enable);
+    ui->ampsThousandthsDown->setEnabled(enable);
+    ui->ampsApply->setEnabled(enable);
+    ui->ampsReset->setEnabled(enable);
+
+    ui->voltsTensUp->setEnabled(enable);
+    ui->voltsTensDown->setEnabled(enable);
+    ui->voltsOnesUp->setEnabled(enable);
+    ui->voltsOnesDown->setEnabled(enable);
+    ui->voltsTenthsUp->setEnabled(enable);
+    ui->voltsTenthsDown->setEnabled(enable);
+    ui->voltsHundrethsUp->setEnabled(enable);
+    ui->voltsHundrethsDown->setEnabled(enable);
+    ui->voltsThousandthsUp->setEnabled(enable);
+    ui->voltsThousandthsDown->setEnabled(enable);
+    ui->voltsApply->setEnabled(enable);
+    ui->voltsReset->setEnabled(enable);
 }
 
 void MainWindow::setActualAmps(qreal value)
@@ -659,7 +687,6 @@ void MainWindow::makeConnections()
 
     connect(ui->serialPort, SIGNAL(activated(int)), this, SLOT(serialPortActivated(int)));
 
-    connect(ui->constantCurrent, SIGNAL(toggled(bool)), this, SLOT(constantCurrentToggled(bool)));
     connect(ui->ampsTensUp, SIGNAL(clicked(bool)), this, SLOT(ampsTensUpClicked(bool)));
     connect(ui->ampsTensDown, SIGNAL(clicked(bool)), this, SLOT(ampsTensDownClicked(bool)));
     connect(ui->ampsOnesUp, SIGNAL(clicked(bool)), this, SLOT(ampsOnesUpClicked(bool)));
@@ -673,7 +700,6 @@ void MainWindow::makeConnections()
     connect(ui->ampsApply, SIGNAL(clicked(bool)), this, SLOT(ampsApplyClicked(bool)));
     connect(ui->ampsReset, SIGNAL(clicked(bool)), this, SLOT(ampsResetClicked(bool)));
 
-    connect(ui->constantVoltage, SIGNAL(toggled(bool)), this, SLOT(constantVoltageToggled(bool)));
     connect(ui->voltsTensUp, SIGNAL(clicked(bool)), this, SLOT(voltsTensUpClicked(bool)));
     connect(ui->voltsTensDown, SIGNAL(clicked(bool)), this, SLOT(voltsTensDownClicked(bool)));
     connect(ui->voltsOnesUp, SIGNAL(clicked(bool)), this, SLOT(voltsOnesUpClicked(bool)));
@@ -719,7 +745,8 @@ void MainWindow::makeConnections()
     connect(&psuThread, SIGNAL(resultGetIdentification(QString,QString)), this, SLOT(resultGetIdentification(QString,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultRecallPanelSetting(int,QString)), this, SLOT(resultRecallPanelSetting(int,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultSavePanelSetting(QString)), this, SLOT(resultSavePanelSetting(QString)), Qt::QueuedConnection);
-    connect(&psuThread, SIGNAL(resultSetOverCurrentProtection(QString)), this, SLOT(resultSetOverCurrentProtection(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultSavePanelSetting(QString)), this, SLOT(resultSavePanelSetting(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultSetOutputEnable(QString)), this, SLOT(resultSetOutputEnable(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultSetKeyboardLock(QString)), this, SLOT(resultSetKeyboardLock(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultIsConstantCurrent(bool,QString)), this, SLOT(resultIsConstantCurrent(bool,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultIsConstantVoltage(bool,QString)), this, SLOT(resultIsConstantVoltage(bool,QString)), Qt::QueuedConnection);
