@@ -50,6 +50,7 @@ void MainWindow::closeClicked(bool checked)
 
     ampsVoltsTimer.stop();
     setEnableOutputColour(true);
+    ui->enableOutput->setEnabled(false);
     AmpsVoltsEnable(false);
 
     emit psuClosePort();
@@ -377,6 +378,7 @@ void MainWindow::resultGetActualOutputCurrent(qreal current, QString errorString
     }
     else
     {
+        showStatusText("Get Actual Output Current complete");
         setActualAmps(current);
     }
 }
@@ -389,6 +391,7 @@ void MainWindow::resultGetActualOutputVoltage(qreal voltage, QString errorString
     }
     else
     {
+        showStatusText("Get Actual Output Voltage complete");
         setActualVolts(voltage);
     }
 }
@@ -396,6 +399,9 @@ void MainWindow::resultGetActualOutputVoltage(qreal voltage, QString errorString
 void MainWindow::resultGetOutputEnable(QString errorString)
 {
     Q_UNUSED(errorString);
+
+    showStatusText("Get Output Enable complete");
+
 }
 
 void MainWindow::resultGetStatus(QString status, QString errorString)
@@ -412,6 +418,8 @@ void MainWindow::resultGetStatus(QString status, QString errorString)
         QStringList stats = status.split("\n");
         ui->mode->setText(stats[0]);
         ui->outputEnabled->setText(stats[1]);
+
+        showStatusText("Get Actual Status complete");
 
         emit psuIsConstantCurrent();
         emit psuIsOutputEnabled();
@@ -432,6 +440,8 @@ void MainWindow::resultGetIdentification(QString identification, QString errorSt
         ts  <<  "Identifier = "
             <<   identification;
         ui->identification->setText(idText);
+
+        showStatusText("Get Identification complete");
     }
 }
 
@@ -439,6 +449,8 @@ void MainWindow::resultRecallPanelSetting(int number, QString errorString)
 {
     Q_UNUSED(errorString);
     Q_UNUSED(number);
+
+    showStatusText("Get Recall Panel Setting complete");
 }
 
 void MainWindow::resultSavePanelSetting(QString errorString)
@@ -452,6 +464,10 @@ void MainWindow::resultSetOutputEnable(QString errorString)
     {
         showStatusText(errorString);
     }
+    else
+    {
+        showStatusText("Set Output Enable complete");
+    }
 }
 
 void MainWindow::resultSetOverCurrentProtection(QString errorString)
@@ -460,11 +476,18 @@ void MainWindow::resultSetOverCurrentProtection(QString errorString)
     {
         showStatusText(errorString);
     }
+    else
+    {
+        showStatusText("Set Over Current Protection complete");
+    }
 }
 
 void MainWindow::resultSetKeyboardLock(QString errorString)
 {
     Q_UNUSED(errorString);
+
+    showStatusText("Set Keyboard Lock complete");
+
 }
 
 void MainWindow::resultIsConstantCurrent(bool result, QString errorString)
@@ -483,6 +506,7 @@ void MainWindow::resultIsConstantCurrent(bool result, QString errorString)
         {
             ui->mode->setText("CV Mode");
         }
+        showStatusText("Is Constant Current complete");
     }
 }
 
@@ -502,6 +526,7 @@ void MainWindow::resultIsConstantVoltage(bool result, QString errorString)
         {
             ui->mode->setText("CC Mode");
         }
+        showStatusText("Is Constant Voltage complete");
     }
 }
 
@@ -528,6 +553,7 @@ void MainWindow::resultIsOutputEnabled(bool result, QString errorString)
         }
 
         AmpsVoltsEnable(true);
+        showStatusText("Is Output Enabled complete");
         ampsVoltsTimer.start();
     }
 }

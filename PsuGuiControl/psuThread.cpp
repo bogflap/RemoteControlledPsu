@@ -88,7 +88,7 @@ void PsuThread::psuSetOutputVoltage(qreal voltage)
 {
     QString error("");
 
-    if (gPsuControl.setVoltage(voltage))
+    if (!gPsuControl.setVoltage(voltage))
     {
         gPsuControl.getError(error);
     }
