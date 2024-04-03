@@ -12,11 +12,13 @@ CONFIG += c++17
 
 SOURCES += \
     Params_72_2710.cpp \
+    psuThread.cpp \
     psucontrol.cpp
 
 HEADERS += \
     Params_72_2710.h \
     PsuContol_global.h \
+    psuThread.h \
     psucontrol.h
 
 # Default rules for deployment.

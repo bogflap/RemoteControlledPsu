@@ -14,7 +14,6 @@ SOURCES += \
     lcdfloattodigits.cpp \
     main.cpp \
     mainwindow.cpp \
-    psuThread.cpp \
     resizingpushbutton.cpp
 
 HEADERS += \
@@ -22,7 +21,6 @@ HEADERS += \
     lcddigitstofloat.h \
     lcdfloattodigits.h \
     mainwindow.h \
-    psuThread.h \
     resizingpushbutton.h
 
 FORMS += \
