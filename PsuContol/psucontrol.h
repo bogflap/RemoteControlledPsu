@@ -30,7 +30,7 @@ public:
     bool    setOverCurrentProtection(bool& enable);
 
     bool    readVoltage(qreal& voltage);
-    bool    setVoltage(qreal mVoltage);
+    bool    setVoltage(qreal voltage);
     bool    rampUpVoltage(qreal &startVoltage,
                           qreal &endVoltage,
                           qreal &rampTimeMs,

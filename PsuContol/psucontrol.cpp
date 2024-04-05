@@ -144,7 +144,9 @@ bool PsuContol::readCurrent(qreal &current)
     Q_UNUSED(current);
     bool    result = true;
 
-        return result;
+    lastError = "Not implemented";
+
+    return result;
 }
 
 bool PsuContol::setCurrent(qreal mCurrent)
@@ -260,16 +262,16 @@ bool PsuContol::readVoltage(qreal &voltage)
     return result;
 }
 
-bool PsuContol::setVoltage(qreal mVoltage)
+bool PsuContol::setVoltage(qreal voltage)
 {
     bool    result = false;
 
-    if ((mVoltage * 1000.0) > psuParams->getMaxVoltageMv())
+    if ((voltage * 1000.0) > psuParams->getMaxVoltageMv())
     {
         QTextStream ts(&lastError);
 
         ts << "Maximum voltage exceeded (Requested "
-           << mVoltage
+           << voltage
            << " Maxiumum "
            << psuParams->getMaxVoltageMv()
            << "mV)"
@@ -279,7 +281,7 @@ bool PsuContol::setVoltage(qreal mVoltage)
     {
         QByteArray  command;
 
-        psuParams->getSetVoltageCommand(command, mVoltage);
+        psuParams->getSetVoltageCommand(command, voltage);
         result = sendCommand(command);
     }
 
@@ -439,6 +441,8 @@ bool PsuContol::setOverVoltageProtection(bool &enable)
     // up the PSU controller if we fire things at it to quickly
     waitForMilliSeconds(50);
 
+    lastError = "Not implemented";
+
     return result;
 }
 
@@ -451,13 +455,22 @@ bool PsuContol::setBeep(bool &enable)
     // up the PSU controller if we fire things at it to quickly
     waitForMilliSeconds(50);
 
+    lastError = "Not implemented";
+
     return result;
 }
 
 bool PsuContol::setChannelOutput(bool &enable)
 {
-    Q_UNUSED(enable);
+    QByteArray  command;
+
     bool    result = true;
+
+    psuParams->setEnableOutCommand(command, enable);
+    if (!sendCommand(command))
+    {
+        result = false;
+    }
 
     // Anything that does not return a value requires a wait because it screws
     // up the PSU controller if we fire things at it to quickly
@@ -475,6 +488,8 @@ bool PsuContol::setPanelLock(bool &enable)
     // up the PSU controller if we fire things at it to quickly
     waitForMilliSeconds(50);
 
+    lastError = "Not implemented";
+
     return result;
 }
 
@@ -487,6 +502,8 @@ bool PsuContol::saveConfiguration(int number)
     // up the PSU controller if we fire things at it to quickly
     waitForMilliSeconds(50);
 
+    lastError = "Not implemented";
+
     return result;
 }
 
@@ -498,6 +515,8 @@ bool PsuContol::recallConfiguration(int number)
     // Anything that does not return a value requires a wait because it screws
     // up the PSU controller if we fire things at it to quickly
     waitForMilliSeconds(50);
+
+    lastError = "Not implemented";
 
     return result;
 }
@@ -690,31 +709,37 @@ bool PsuContol::receiveResponse(QByteArray &response)
 bool PsuContol::checkChannel(int channel)
 {
     bool    result = true;
-        if (channel > psuParams->getMaxChannels())
-        {
-            result = false;
-        }
+
+    if (channel > psuParams->getMaxChannels())
+    {
+        result = false;
+    }
+
     return result;
 }
 
 bool PsuContol::checkVoltage(float_t voltage)
 {
     bool    result = true;
-        if (voltage > psuParams->getMaxVoltageMv())
-        {
-            result = false;
-        }
+
+    if (voltage > psuParams->getMaxVoltageMv())
+    {
+        result = false;
+    }
+
     return result;
 }
 
 bool PsuContol::checkCurrent(float_t current)
 {
     bool    result = true;
-        if (current > psuParams->getMaxCurrentMa())
-        {
-            result = false;
-        }
-        return result;
+
+    if (current > psuParams->getMaxCurrentMa())
+    {
+        result = false;
+    }
+
+    return result;
 }
 
 bool PsuContol::getPortOpen() const
