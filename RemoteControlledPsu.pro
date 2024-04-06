@@ -7,5 +7,6 @@ SUBDIRS += \
     PsuContol \
     PsuGuiControl \
     SodiumIonBatteryCharger \
+    SodiumIonChargeTest \
     SodiumIonInitialisationTest \
     TestRoutine
