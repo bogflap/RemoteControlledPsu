@@ -8,6 +8,10 @@
 Q_GLOBAL_STATIC(QSerialPort, serialPort);
 Q_GLOBAL_STATIC(Params_72_2710, psuParams);
 
+// Need this to prevent high levels from output commands to quickly for the PSU
+// to handle
+#define INTER_COMMAND_DELAY  50
+
 PsuContol::PsuContol()
 {
     lastError = "";
@@ -78,6 +82,9 @@ bool PsuContol::getVersion(QString &version)
         break;
     }
 
+    // Avoid overloading the PSU interface
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
+
     return bResult;
 }
 
@@ -126,6 +133,9 @@ bool PsuContol::getStatus(QTextStream &status)
         break;
     }
 
+    // Avoid overloading the PSU interface
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
+
     return result;
 }
 
@@ -172,9 +182,7 @@ bool PsuContol::setCurrent(qreal mCurrent)
         result = sendCommand(command);
     }
 
-    // Anything that does not return a value requires a wait because it screws
-    // up the PSU controller if we fire things at it to quickly
-    waitForMilliSeconds(50);
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
 
     return result;
 }
@@ -208,6 +216,9 @@ bool PsuContol::actualCurrent(qreal &current)
         break;
     }
 
+    // Avoid overloading the PSU interface
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
+
     return result;
 }
 
@@ -223,9 +234,8 @@ bool PsuContol::setOverCurrentProtection(bool &enable)
         result = false;
     }
 
-    // Anything that does not return a value requires a wait because it screws
-    // up the PSU controller if we fire things at it to quickly
-    waitForMilliSeconds(50);
+    // Avoid overloading the PSU interface
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
 
     return result;
 }
@@ -259,6 +269,9 @@ bool PsuContol::readVoltage(qreal &voltage)
         break;
     }
 
+    // Avoid overloading the PSU interface
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
+
     return result;
 }
 
@@ -285,9 +298,8 @@ bool PsuContol::setVoltage(qreal voltage)
         result = sendCommand(command);
     }
 
-    // Anything that does not return a value requires a wait because it screws
-    // up the PSU controller if we fire things at it to quickly
-    waitForMilliSeconds(50);
+    // Avoid overloading the PSU interface
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
 
     return result;
 }
@@ -429,6 +441,9 @@ bool PsuContol::actualVoltage(qreal &voltage)
         break;
     }
 
+    // Avoid overloading the PSU interface
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
+
     return result;
 }
 
@@ -437,9 +452,7 @@ bool PsuContol::setOverVoltageProtection(bool &enable)
     Q_UNUSED(enable);
     bool    result = true;
 
-    // Anything that does not return a value requires a wait because it screws
-    // up the PSU controller if we fire things at it to quickly
-    waitForMilliSeconds(50);
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
 
     lastError = "Not implemented";
 
@@ -451,9 +464,7 @@ bool PsuContol::setBeep(bool &enable)
     Q_UNUSED(enable);
     bool    result = true;
 
-    // Anything that does not return a value requires a wait because it screws
-    // up the PSU controller if we fire things at it to quickly
-    waitForMilliSeconds(50);
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
 
     lastError = "Not implemented";
 
@@ -472,9 +483,7 @@ bool PsuContol::setChannelOutput(bool &enable)
         result = false;
     }
 
-    // Anything that does not return a value requires a wait because it screws
-    // up the PSU controller if we fire things at it to quickly
-    waitForMilliSeconds(50);
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
 
     return result;
 }
@@ -484,9 +493,7 @@ bool PsuContol::setPanelLock(bool &enable)
     Q_UNUSED(enable);
     bool    result = true;
 
-    // Anything that does not return a value requires a wait because it screws
-    // up the PSU controller if we fire things at it to quickly
-    waitForMilliSeconds(50);
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
 
     lastError = "Not implemented";
 
@@ -498,9 +505,7 @@ bool PsuContol::saveConfiguration(int number)
     Q_UNUSED(number);
     bool    result = true;
 
-    // Anything that does not return a value requires a wait because it screws
-    // up the PSU controller if we fire things at it to quickly
-    waitForMilliSeconds(50);
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
 
     lastError = "Not implemented";
 
@@ -512,9 +517,7 @@ bool PsuContol::recallConfiguration(int number)
     Q_UNUSED(number);
     bool    result = true;
 
-    // Anything that does not return a value requires a wait because it screws
-    // up the PSU controller if we fire things at it to quickly
-    waitForMilliSeconds(50);
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
 
     lastError = "Not implemented";
 
@@ -552,6 +555,9 @@ bool PsuContol::isConstantCurrent(bool &constantCurrent)
         break;
     }
 
+    // Avoid overloading the PSU interface
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
+
     return result;
 }
 
@@ -573,6 +579,9 @@ bool PsuContol::isConstantVoltage(bool &constantVoltage)
         break;
     }
 
+    // Avoid overloading the PSU interface
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
+
     return result;
 }
 
@@ -593,6 +602,9 @@ bool PsuContol::isOutputEnabled(bool &outputEnabled)
         result = true;
         break;
     }
+
+    // Avoid overloading the PSU interface
+    waitForMilliSeconds(INTER_COMMAND_DELAY);
 
     return result;
 }

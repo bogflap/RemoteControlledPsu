@@ -20,10 +20,7 @@
 #define VOLTS_INCREMENT         0.012
 
 // SodiumIonInitialisationTest has shown that 3.044V is a good start point
-
-// Seems to need a delay between commands otherwise it does not work properly
-// At present the following WAIT_TIME seems to work
-#define DELAY_TIME_MS 50
+// using a 3.9ohm resistor as test load
 
 int main(int argc, char *argv[])
 {
@@ -77,8 +74,6 @@ int main(int argc, char *argv[])
             qDebug() << error << Qt::endl;
             break;
         }
-
-        psuControl.waitForMilliSeconds(DELAY_TIME_MS);
 
         while (true)
         {
