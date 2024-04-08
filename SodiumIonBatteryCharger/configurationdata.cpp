@@ -3,13 +3,14 @@
 ConfigurationData::ConfigurationData(QObject *parent)
     : QObject(parent)
     , settings(nullptr)
+    , valid(false)
 {
 
 }
 
 bool ConfigurationData::open(QString &filePath)
 {
-    bool    result = false;
+    bool    result = true;
 
     if (settings != nullptr)
     {
@@ -20,22 +21,128 @@ bool ConfigurationData::open(QString &filePath)
                                 QSettings::IniFormat,
                                 this);
 
-    maxChargeTime = settings->value("Timings/MaxChargeTime").toInt();
-    voltageIncrement = settings->value("Increments/VoltageIncrement").toInt();
+    valid = false;
+
+    while (true)
+    {
+        if (!getIntValue("Timings", "MaxChargePeriod", maxChargePeriod))
+        {
+            result = false;
+            break;
+        }
+        if (!getIntValue("Timings", "UpdatePeriod", updatePeriod))
+        {
+            result = false;
+            break;
+        }
+        if (!getIntValue("Voltages", "MaxAppliedVolts", maxAppliedVolts))
+        {
+            result = false;
+            break;
+        }
+        if (!getIntValue("Voltages", "MinAppliedVolts", minAppliedVolts))
+        {
+            result = false;
+            break;
+        }
+        if (!getIntValue("Currents", "MaxConstantCurrent", maxConstantCurrent))
+        {
+            result = false;
+            break;
+        }
+        if (!getIntValue("Currents", "MaxChargeCurrent", maxChargeCurrent))
+        {
+            result = false;
+            break;
+        }
+        if (!getIntValue("Currents", "CompletedCurrent", completedCurrent))
+        {
+            result = false;
+            break;
+        }
+        if (!getIntValue("Increments", "VoltsIncrement", voltsIncrement))
+        {
+            result = false;
+            break;
+        }
+
+        valid = true;
+        break;
+    }
 
     delete settings;
     settings = nullptr;
-    result = true;
 
     return result;
 }
 
-int ConfigurationData::getMaxChargeTime() const
+int ConfigurationData::getMaxChargePeriod() const
 {
-    return maxChargeTime;
+    return maxChargePeriod;
 }
 
-int ConfigurationData::getVoltageIncrement() const
+int ConfigurationData::getVoltsIncrement() const
 {
-    return voltageIncrement;
+    return voltsIncrement;
+}
+
+bool ConfigurationData::getIntValue(QString group, QString key, int &value)
+{
+    QVariant    v;
+    bool        vOk;
+
+    bool        result = true;
+
+    while (true)
+    {
+        QString gk = group + "/" + key;
+
+        v = settings->value(gk);
+        if (!v.isValid())
+        {
+            result = false;
+            break;
+        }
+
+        value = v.toInt(&vOk);
+        if (!vOk)
+        {
+            result = false;
+            break;
+        }
+
+        break;
+    }
+
+    return result;
+}
+
+bool ConfigurationData::isValid() const
+{
+    return valid;
+}
+
+int ConfigurationData::getCompletedCurrent() const
+{
+    return completedCurrent;
+}
+
+int ConfigurationData::getMaxChargeCurrent() const
+{
+    return maxChargeCurrent;
+}
+
+int ConfigurationData::getMinAppliedVolts() const
+{
+    return minAppliedVolts;
+}
+
+int ConfigurationData::getMaxAppliedVolts() const
+{
+    return maxAppliedVolts;
+}
+
+int ConfigurationData::getUpdatePeriod() const
+{
+    return updatePeriod;
 }

@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    tPsuThread.quit();
+    tPsuThread.wait();
     delete ui;
 }
 
@@ -25,21 +27,24 @@ void MainWindow::selectIniFileClicked(bool checked)
 {
     Q_UNUSED(checked);
 
-    QString filePath;
-
-    filePath = QFileDialog::getOpenFileName(this,
-                                            "Open Initialisation File",
-                                            "",
-                                            "Ini File (*.ini)",
-                                            nullptr,
-                                            QFileDialog::ReadOnly);
-
-    confData.open(filePath);
+    confFilePath = QFileDialog::getOpenFileName(this,
+                                                "Open Initialisation File",
+                                                "",
+                                                "Ini File (*.ini)",
+                                                nullptr,
+                                                QFileDialog::ReadOnly);
+    ui->iniFile->setText(confFilePath);
 }
 
 void MainWindow::openIniFileClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    if (!confData.open(confFilePath))
+    {
+        QString error("ERROR: Invalid Configuration File");
+        ui->statusbar->showMessage(error);
+    }
 }
 
 void MainWindow::openSerialPortClicked(bool checked)
@@ -70,4 +75,5 @@ void MainWindow::quitClicked(bool checked)
 void MainWindow::makeConnections()
 {
     connect(ui->selectIniFile, SIGNAL(clicked(bool)), this, SLOT(selectIniFileClicked(bool)));
+    connect(ui->openIniFile, SIGNAL(clicked(bool)), this, SLOT(openIniFileClicked(bool)));
 }

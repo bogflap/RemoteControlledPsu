@@ -38,5 +38,6 @@ private:
     ConfigurationData   confData;
     PsuThread           psuThread;
     QThread             tPsuThread;
+    QString             confFilePath;
 };
 #endif // MAINWINDOW_H

@@ -10,14 +10,36 @@ public:
     ConfigurationData(QObject* parent);
     bool    open(QString& filePath);
 
-    int getMaxChargeTime() const;
+    int getMaxChargePeriod() const;
 
-    int getVoltageIncrement() const;
+    int getVoltsIncrement() const;
+
+    int getUpdatePeriod() const;
+
+    int getMaxAppliedVolts() const;
+
+    int getMinAppliedVolts() const;
+
+    int getMaxChargeCurrent() const;
+
+    int getCompletedCurrent() const;
+
+    bool isValid() const;
+
+private:
+    bool        getIntValue(QString group, QString key, int& value);
 
 private:
     QSettings   *settings;
-    int         maxChargeTime;
-    int         voltageIncrement;
+    bool        valid;
+    int         updatePeriod;
+    int         maxChargePeriod;
+    int         maxAppliedVolts;
+    int         minAppliedVolts;
+    int         maxConstantCurrent;
+    int         maxChargeCurrent;
+    int         completedCurrent;
+    int         voltsIncrement;
 };
 
 #endif // CONFIGURATIONDATA_H
