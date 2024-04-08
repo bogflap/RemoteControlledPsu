@@ -62,7 +62,7 @@ private:
                                  int &actualTimeMs);
 
     bool    sendCommand(QByteArray& command);
-    bool    receiveResponse(QByteArray& response);
+    bool    receiveResponse(QByteArray& response, int expected = 0);
 
     bool    checkChannel(int channel);
     bool    checkVoltage(float_t voltage);

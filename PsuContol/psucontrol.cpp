@@ -10,7 +10,8 @@ Q_GLOBAL_STATIC(Params_72_2710, psuParams);
 
 // Need this to prevent high levels from output commands to quickly for the PSU
 // to handle
-#define INTER_COMMAND_DELAY  50
+#define INTER_COMMAND_DELAY         50      // milliseconds
+#define INTER_COMMAND_LONG_DELAY    100     // milliseconds
 
 PsuContol::PsuContol()
 {
@@ -56,7 +57,7 @@ bool PsuContol::close()
 
 bool PsuContol::getVersion(QString &version)
 {
-    bool        bResult = false;
+    bool        bResult = true;
     QByteArray  byteCommand;
     QByteArray  byteVersion;
 
@@ -68,17 +69,19 @@ bool PsuContol::getVersion(QString &version)
 
         if (!sendCommand(byteCommand))
         {
+            bResult = false;
             break;
         }
 
+        // Do not know length of response yet so leave it at the default
         if (!receiveResponse(byteVersion))
         {
+            bResult = false;
             break;
         }
 
         version = QString::fromUtf8(byteVersion);
 
-        bResult = true;
         break;
     }
 
@@ -90,7 +93,7 @@ bool PsuContol::getVersion(QString &version)
 
 bool PsuContol::getStatus(QTextStream &status)
 {
-    bool                result = false;
+    bool                result = true;
     unsigned char       uCharStatus = 0;;
     QByteArray          byteCommand;
     QByteArray          byteStatus;
@@ -101,11 +104,13 @@ bool PsuContol::getStatus(QTextStream &status)
 
         if (!sendCommand(byteCommand))
         {
-                break;
+            result = false;
+            break;
         }
 
-        if (!receiveResponse(byteStatus))
+        if (!receiveResponse(byteStatus, 1))
         {
+            result = false;
             break;
         }
 
@@ -129,7 +134,6 @@ bool PsuContol::getStatus(QTextStream &status)
             status << "Output OFF" << Qt::endl;
         }
 
-        result = true;
         break;
     }
 
@@ -161,7 +165,7 @@ bool PsuContol::readCurrent(qreal &current)
 
 bool PsuContol::setCurrent(qreal mCurrent)
 {
-    bool    result = false;
+    bool    result = true;
 
     if ((mCurrent * 1000.0) > psuParams->getMaxCurrentMa())
     {
@@ -204,6 +208,7 @@ bool PsuContol::actualCurrent(qreal &current)
             break;
         }
 
+        // Do not know length of response yet so leave it at the default
         if (!receiveResponse(readCurrent))
         {
             result = false;
@@ -257,6 +262,7 @@ bool PsuContol::readVoltage(qreal &voltage)
             break;
         }
 
+        // Do not know length of response yet so leave it at the default
         if (!receiveResponse(readVoltage))
         {
             result = false;
@@ -429,6 +435,7 @@ bool PsuContol::actualVoltage(qreal &voltage)
             break;
         }
 
+        // Do not know length of response yet so leave it at the default
         if (!receiveResponse(readVoltage))
         {
             result = false;
@@ -483,7 +490,8 @@ bool PsuContol::setChannelOutput(bool &enable)
         result = false;
     }
 
-    waitForMilliSeconds(INTER_COMMAND_DELAY);
+    // Long delay here to allow for possible OUTPUT Current Protection to work
+    waitForMilliSeconds(INTER_COMMAND_LONG_DELAY);
 
     return result;
 }
@@ -539,19 +547,19 @@ void PsuContol::getError(QString &error)
 
 bool PsuContol::isConstantCurrent(bool &constantCurrent)
 {
-    bool            result = false;
+    bool            result = true;
     unsigned char   status = 0;
 
     while(true)
     {
         if (!getRawStatus(status))
         {
+            result = false;
             break;
         }
 
         constantCurrent = (status & 0x01) ? false : true;
 
-        result = true;
         break;
     }
 
@@ -563,19 +571,19 @@ bool PsuContol::isConstantCurrent(bool &constantCurrent)
 
 bool PsuContol::isConstantVoltage(bool &constantVoltage)
 {
-    bool            result = false;
+    bool            result = true;
     unsigned char   status = 0;
 
     while(true)
     {
         if (!getRawStatus(status))
         {
+            result = false;
             break;
         }
 
         constantVoltage = (status & 0x01) ? true : false;
 
-        result = true;
         break;
     }
 
@@ -587,19 +595,19 @@ bool PsuContol::isConstantVoltage(bool &constantVoltage)
 
 bool PsuContol::isOutputEnabled(bool &outputEnabled)
 {
-    bool            result = false;
+    bool            result = true;
     unsigned char   status = 0;
 
     while(true)
     {
         if (!getRawStatus(status))
         {
+            result = false;
             break;
         }
 
         outputEnabled = (status & 0x40) ? true : false;
 
-        result = true;
         break;
     }
 
@@ -611,7 +619,7 @@ bool PsuContol::isOutputEnabled(bool &outputEnabled)
 
 bool PsuContol::getRawStatus(unsigned char &status)
 {
-    bool                result = false;
+    bool                result = true;
     QByteArray          byteCommand;
     QByteArray          byteStatus;
 
@@ -621,17 +629,18 @@ bool PsuContol::getRawStatus(unsigned char &status)
 
         if (!sendCommand(byteCommand))
         {
-                break;
+            result = false;
+            break;
         }
 
-        if (!receiveResponse(byteStatus))
+        if (!receiveResponse(byteStatus, 1))
         {
+            result = false;
             break;
         }
 
         status = *byteStatus.constData();
 
-        result = true;
         break;
     }
 
@@ -699,22 +708,35 @@ bool PsuContol::sendCommand(QByteArray &command)
     return result;
 }
 
-bool PsuContol::receiveResponse(QByteArray &response)
+bool PsuContol::receiveResponse(QByteArray &response, int expected)
 {
-    bool    result = false;
+    bool    result = true;
 
     while (true)
     {
         if (!serialPort->waitForReadyRead())
         {
+            result = false;
             break;
         }
 
         response = serialPort->readAll();
+        if (expected > 0)
+        {
+            // A length is expected so check it
+            if (response.length() != expected)
+            {
+                result = false;
+            }
+        }
+        else
+        {
+            result = true;
+        }
 
-        result = true;
         break;
     }
+
     return result;
 }
 
