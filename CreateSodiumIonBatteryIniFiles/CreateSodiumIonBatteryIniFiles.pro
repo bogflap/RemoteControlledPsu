@@ -15,4 +15,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    InitialisationFiles/SodiumIon_18650_1500mA.ini
+    InitialisationFiles/SodiumIon_18650_1500mA.ini \
+    InitialisationFiles/Test.ini
