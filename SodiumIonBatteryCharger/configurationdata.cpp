@@ -25,6 +25,16 @@ bool ConfigurationData::open(QString &filePath)
 
     while (true)
     {
+        QVariant    v;
+        QString gk = "Identification/ConfigurationId";
+
+        v = settings->value(gk);
+        configurationId = v.toString();
+        if (!v.isValid())
+        {
+            result = false;
+            break;
+        }
         if (!getIntValue("Timings", "MaxChargePeriod", maxChargePeriod))
         {
             result = false;
@@ -115,6 +125,11 @@ bool ConfigurationData::getIntValue(QString group, QString key, int &value)
     }
 
     return result;
+}
+
+QString ConfigurationData::getConfigurationId() const
+{
+    return configurationId;
 }
 
 bool ConfigurationData::isValid() const

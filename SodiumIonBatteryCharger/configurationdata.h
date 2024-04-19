@@ -26,12 +26,15 @@ public:
 
     bool isValid() const;
 
+    QString getConfigurationId() const;
+
 private:
     bool        getIntValue(QString group, QString key, int& value);
 
 private:
     QSettings   *settings;
     bool        valid;
+    QString     configurationId;
     int         updatePeriod;
     int         maxChargePeriod;
     int         maxAppliedVolts;

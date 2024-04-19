@@ -1,4 +1,5 @@
-QT       += core gui charts
+QT += core gui charts
+QT += serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -9,11 +10,18 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    ../PsuContol/Params_72_2710.cpp \
+    ../PsuContol/psuThread.cpp \
+    ../PsuContol/psucontrol.cpp \
     configurationdata.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    ../PsuContol/Params_72_2710.h \
+    ../PsuContol/PsuContol_global.h \
+    ../PsuContol/psuThread.h \
+    ../PsuContol/psucontrol.h \
     configurationdata.h \
     mainwindow.h
 
@@ -26,11 +34,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    InitialisationFiles/SodiumIon_18650_1500mA.ini
-
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../PsuContol/release/ -lPsuContol
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../PsuContol/debug/ -lPsuContol
-else:unix: LIBS += -L$$OUT_PWD/../PsuContol/ -lPsuContol
+    InitialisationFiles/SodiumIon_18650_1500mA.ini \
+    InitialisationFiles/Test.ini
 
 INCLUDEPATH += $$PWD/../PsuContol
 DEPENDPATH += $$PWD/../PsuContol

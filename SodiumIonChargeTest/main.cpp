@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     PsuContol   psuControl;
 
     qreal       voltage;
-    qreal       current;
+//    qreal       current;
     QString     error;
     bool        bResult;
 
@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
     while(true)
     {
         bool    outputEnable;
-        bool    outputEnabled;
-        bool    outputCurrentProtect;
+//        bool    outputEnabled;
+//        bool    outputCurrentProtect;
 
         // Start with the initialisation suggested value
         voltage = 3.044;

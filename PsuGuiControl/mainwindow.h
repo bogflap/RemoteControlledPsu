@@ -48,7 +48,6 @@ signals:
 
     // Slots for PSU thread results
 public slots:
-
     void    resultOpenPort(QString);
     void    resultClosePort(QString);
     void    resultSetOutputCurrent(QString);
