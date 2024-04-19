@@ -49,6 +49,20 @@ void MainWindow::displayConfigurationId(QString &cId)
     ui->iniIdentifier->setText(preAmble);
 }
 
+void MainWindow::stopCharging(QString &reason)
+{
+    emit psuSetOutputEnable(false);
+
+    displayErrorDialog(reason);
+
+    ui->start->setEnabled(false);
+    ui->pause->setEnabled(false);
+    ui->stop->setEnabled(false);
+
+    timer.stop();
+
+}
+
 MainWindow::~MainWindow()
 {
     tPsuThread.quit();
@@ -84,6 +98,9 @@ void MainWindow::openIniFileClicked(bool checked)
 
         QString configId = confData.getConfigurationId();
         displayConfigurationId(configId);
+
+        chargeCompleteCurrent = confData.getCompletedCurrent();
+        minAppliedVoltage = confData.getMinAppliedVolts();
     }
 }
 
@@ -101,7 +118,12 @@ void MainWindow::startClicked(bool checked)
 {
     Q_UNUSED(checked);
 
+    int maxChargePeriod = confData.getMaxChargePeriod() / 1000;
+
     ui->start->setEnabled(false);
+
+    endTime = QDateTime::currentDateTime();
+    endTime = endTime.addSecs(maxChargePeriod);
 
     qreal   current = confData.getMaxChargeCurrent();
     current /= 1000.0;
@@ -125,7 +147,17 @@ void MainWindow::quitClicked(bool checked)
 
 void MainWindow::timerExpired()
 {
+    int elapsedSeconds = QDateTime::currentDateTime().secsTo(endTime);
 
+    if (elapsedSeconds < 0)
+    {
+        QString error("Maximum charge time exceeded");
+        stopCharging(error);
+    }
+    else
+    {
+        emit psuGetActualOutputVoltage();
+    }
 }
 
 void MainWindow::resultOpenPort(QString error)
@@ -184,14 +216,41 @@ void MainWindow::resultGetOutputVoltage(qreal, QString error)
     Q_UNUSED(error);
 }
 
-void MainWindow::resultGetActualOutputCurrent(qreal, QString error)
+void MainWindow::resultGetActualOutputCurrent(qreal current, QString error)
 {
-    Q_UNUSED(error);
+    if (error != "")
+    {
+        stopCharging(error);
+    }
+    else
+    {
+        if (current <= (qreal) chargeCompleteCurrent)
+        {
+            QString reason("Charging complete");
+            stopCharging(reason);
+        }
+        // else do nothing
+    }
 }
 
-void MainWindow::resultGetActualOutputVoltage(qreal, QString error)
+void MainWindow::resultGetActualOutputVoltage(qreal voltage, QString error)
 {
-    Q_UNUSED(error);
+    if (error != "")
+    {
+        stopCharging(error);
+    }
+    else
+    {
+        if (voltage < (qreal) minAppliedVoltage)
+        {
+            QString reason("Minimum voltage detected");
+            stopCharging(reason);
+        }
+        else
+        {
+            emit psuGetActualOutputCurrent();
+        }
+    }
 }
 
 void MainWindow::resultGetOutputEnable(QString error)
@@ -276,9 +335,19 @@ void MainWindow::makeConnections()
 
     connect(this, SIGNAL(psuOpenPort(QString)), &psuThread, SLOT(psuOpenPort(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuClosePort()), &psuThread, SLOT(psuClosePort()), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuSetOutputEnable(bool)), &psuThread, SLOT(psuSetOutputEnable(bool)), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuSetOutputCurrent(qreal)), &psuThread, SLOT(psuSetOutputCurrent(qreal)), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuSetOutputVoltage(qreal)), &psuThread, SLOT(psuSetOutputVoltage(qreal)), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuGetActualOutputCurrent()), &psuThread, SLOT(psuGetActualOutputCurrent()), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuGetActualOutputVoltage()), &psuThread, SLOT(psuGetActualOutputVoltage()), Qt::QueuedConnection);
 
     connect(&psuThread, SIGNAL(resultOpenPort(QString)), this, SLOT(resultOpenPort(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultClosePort(QString)), this, SLOT(resultClosePort(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultSetOutputEnable(QString)), this, SLOT(resultSetOutputEnable(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultSetOutputCurrent(QString)), this, SLOT(resultSetOutputCurrent(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultSetOutputVoltage(QString)), this, SLOT(resultSetOutputVoltage(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultGetActualOutputCurrent(qreal,QString)), this, SLOT(resultGetActualOutputCurrent(qreal,QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultGetActualOutputVoltage(qreal,QString)), this, SLOT(resultGetActualOutputVoltage(qreal,QString)), Qt::QueuedConnection);
 
     connect(&timer, SIGNAL(timeout()), this, SLOT(timerExpired()), Qt::QueuedConnection);
 }

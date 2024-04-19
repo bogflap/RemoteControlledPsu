@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QThread>
 #include <QTimer>
+#include <QDateTime>
 
 #include "configurationdata.h"
 #include "psuThread.h"
@@ -51,8 +52,8 @@ private slots:
     void    resultGetOutputCurrent(qreal current, QString error);
     void    resultSetOutputVoltage(QString);
     void    resultGetOutputVoltage(qreal, QString);
-    void    resultGetActualOutputCurrent(qreal, QString);
-    void    resultGetActualOutputVoltage(qreal, QString);
+    void    resultGetActualOutputCurrent(qreal current, QString);
+    void    resultGetActualOutputVoltage(qreal voltage, QString);
     void    resultGetOutputEnable(QString);
     void    resultGetStatus(QString status, QString);
     void    resultGetIdentification(QString identification, QString);
@@ -81,6 +82,7 @@ private:
     void    getSerialPorts();
     void    displayErrorDialog(QString &error);
     void    displayConfigurationId(QString &cId);
+    void    stopCharging(QString &reason);
 
 private:
     Ui::MainWindow *ui;
@@ -89,5 +91,8 @@ private:
     QThread             tPsuThread;
     QString             confFilePath;
     QTimer              timer;
+    QDateTime           endTime;
+    int                 chargeCompleteCurrent;
+    int                 minAppliedVoltage;
 };
 #endif // MAINWINDOW_H
