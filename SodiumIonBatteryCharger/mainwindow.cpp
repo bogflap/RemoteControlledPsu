@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , confData(parent)
+    , quitting(false)
 {
     ui->setupUi(this);
 
@@ -143,6 +144,12 @@ void MainWindow::stopClicked(bool checked)
 void MainWindow::quitClicked(bool checked)
 {
     Q_UNUSED(checked);
+
+    timer.stop();
+
+    quitting = true;
+
+    emit psuClosePort();}
 }
 
 void MainWindow::timerExpired()
@@ -175,6 +182,11 @@ void MainWindow::resultOpenPort(QString error)
 void MainWindow::resultClosePort(QString error)
 {
     Q_UNUSED(error);
+
+    if (quitting)
+    {
+        exit(0);
+    }
 }
 
 void MainWindow::resultSetOutputCurrent(QString error)

@@ -94,5 +94,6 @@ private:
     QDateTime           endTime;
     int                 chargeCompleteCurrent;
     int                 minAppliedVoltage;
+    bool                quitting;
 };
 #endif // MAINWINDOW_H
