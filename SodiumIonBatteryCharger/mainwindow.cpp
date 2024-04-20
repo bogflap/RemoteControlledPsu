@@ -149,7 +149,7 @@ void MainWindow::quitClicked(bool checked)
 
     quitting = true;
 
-    emit psuClosePort();}
+    emit psuClosePort();
 }
 
 void MainWindow::timerExpired()

@@ -93,7 +93,7 @@ void CreateHakadiFile()
 
     QString id("HakadiSodiumIon_18650_1500mA");
     WriteIdentificationSection(oTs, id);
-    int   mcp = 1000;
+    int   mcp = 1000000;
     int   up = 1000;
     WriteTimingsSection(oTs, mcp, up);
     int maxAp = 4100;
@@ -132,7 +132,7 @@ void CreateTestFile()
 
     QString id("SodiumIonBatteryChargerTestFile");
     WriteIdentificationSection(oTs, id);
-    int   mcp = 1000;
+    int   mcp = 1000000;
     int   up = 1000;
     WriteTimingsSection(oTs, mcp, up);
     int maxAp = 4100;
