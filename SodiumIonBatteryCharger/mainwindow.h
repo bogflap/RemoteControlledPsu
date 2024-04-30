@@ -87,7 +87,8 @@ private:
         eSERIAL_PORT_OPENED,
         eCHARGE_NOT_STARTED,
         eCHARGE_STARTED,
-        eCHARGE_PAUSED
+        eCHARGE_PAUSED,
+        eCHARGE_STOPPING
     };
 
     eChargingState      currentState;

@@ -93,7 +93,7 @@ void MainWindow::setCurrentState(eChargingState newState)
         break;
     case eCHARGE_STOPPING:
         ui->openSerialPort->setEnabled(false);
-        ui->openIniFile->setEnabled(true);
+        ui->openIniFile->setEnabled(false);
         ui->start->setEnabled(false);
         ui->pause->setEnabled(false);
         ui->stop->setEnabled(false);
@@ -167,9 +167,11 @@ void MainWindow::stopCharging(QString &reason)
 {
     emit psuSetOutputEnable(false);
 
+    // The order of these calls is important as signal/slot event loop continues
+    // even with the dialog displayed
     timer.stop();
+    setCurrentState(eCHARGE_STOPPING);
     displayErrorDialog(reason);
-    setCurrentState(eCHARGE_NOT_STARTED);
 }
 
 void MainWindow::floatToDigits(qreal value, int &tens, int &ones, int &tenths, int &hundreths, int &thousandths)
@@ -467,9 +469,18 @@ void MainWindow::resultSetOutputEnable(QString error)
     }
     else
     {
-        setCurrentState(eCHARGE_STARTED);
-        qreal updatePeriod = confData.getUpdatePeriod();
-        timer.start(updatePeriod);
+        // Required test as SetOutputEnable is part of the start and end
+        // sequence
+        if (currentState != eCHARGE_STOPPING)
+        {
+            setCurrentState(eCHARGE_STARTED);
+            qreal updatePeriod = confData.getUpdatePeriod();
+            timer.start(updatePeriod);
+        }
+        else
+        {
+            setCurrentState(eCHARGE_NOT_STARTED);
+        }
     }
 }
 
