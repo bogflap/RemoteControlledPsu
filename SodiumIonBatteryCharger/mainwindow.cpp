@@ -9,7 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , confData(parent)
-    , quitting(false)
 {
     ui->setupUi(this);
 
@@ -17,6 +16,9 @@ MainWindow::MainWindow(QWidget *parent)
     tPsuThread.start();
 
     timer.setSingleShot(false);
+
+    quitting = false;
+    setCurrentState(eNO_STATE);
 
     makeConnections();
     getSerialPorts();
@@ -35,6 +37,75 @@ void MainWindow::getSerialPorts()
     }
 }
 
+void MainWindow::setCurrentState(eChargingState newState)
+{
+    currentState = newState;
+
+    switch(currentState)
+    {
+    case eNO_STATE:
+        ui->openSerialPort->setEnabled(false);
+        ui->openIniFile->setEnabled(true);
+        ui->start->setEnabled(false);
+        ui->pause->setEnabled(false);
+        ui->stop->setEnabled(false);
+        ui->quit->setEnabled(true);
+        break;
+    case eINIT_PORT_OPENED:
+        ui->openSerialPort->setEnabled(true);
+        ui->openIniFile->setEnabled(true);
+        ui->start->setEnabled(false);
+        ui->pause->setEnabled(false);
+        ui->stop->setEnabled(false);
+        ui->quit->setEnabled(true);
+        break;
+    case eSERIAL_PORT_OPENED:
+        ui->openSerialPort->setEnabled(true);
+        ui->openIniFile->setEnabled(true);
+        ui->start->setEnabled(false);
+        ui->pause->setEnabled(false);
+        ui->stop->setEnabled(false);
+        ui->quit->setEnabled(true);
+        break;
+    case eCHARGE_NOT_STARTED:
+        ui->openSerialPort->setEnabled(false);
+        ui->openIniFile->setEnabled(false);
+        ui->start->setEnabled(true);
+        ui->pause->setEnabled(false);
+        ui->stop->setEnabled(false);
+        ui->quit->setEnabled(true);
+        break;
+    case eCHARGE_STARTED:
+        ui->openSerialPort->setEnabled(false);
+        ui->openIniFile->setEnabled(false);
+        ui->start->setEnabled(false);
+        ui->pause->setEnabled(true);
+        ui->stop->setEnabled(true);
+        ui->quit->setEnabled(false);
+        break;
+    case eCHARGE_PAUSED:
+        ui->openSerialPort->setEnabled(false);
+        ui->openIniFile->setEnabled(true);
+        ui->start->setEnabled(false);
+        ui->pause->setEnabled(true);
+        ui->stop->setEnabled(false);
+        ui->quit->setEnabled(true);
+        break;
+    case eCHARGE_STOPPING:
+        ui->openSerialPort->setEnabled(false);
+        ui->openIniFile->setEnabled(true);
+        ui->start->setEnabled(false);
+        ui->pause->setEnabled(false);
+        ui->stop->setEnabled(false);
+        ui->quit->setEnabled(true);
+        break;
+    default:
+        QString error("Unknown state");
+        displayErrorDialog(error);
+        break;
+    }
+}
+
 void MainWindow::displayErrorDialog(QString &error)
 {
     QString title("Error");
@@ -50,18 +121,21 @@ void MainWindow::displayConfigurationId(QString &cId)
     ui->iniIdentifier->setText(preAmble);
 }
 
+void MainWindow::displayPsuId(QString &pId)
+{
+    QString preAmble("Power Supply Id: ");
+
+    preAmble.append(pId);
+    ui->psuIdentifier->setText(preAmble);
+}
+
 void MainWindow::stopCharging(QString &reason)
 {
     emit psuSetOutputEnable(false);
 
-    displayErrorDialog(reason);
-
-    ui->start->setEnabled(false);
-    ui->pause->setEnabled(false);
-    ui->stop->setEnabled(false);
-
     timer.stop();
-
+    displayErrorDialog(reason);
+    setCurrentState(eCHARGE_NOT_STARTED);
 }
 
 MainWindow::~MainWindow()
@@ -95,13 +169,15 @@ void MainWindow::openIniFileClicked(bool checked)
     }
     else
     {
-        ui->openSerialPort->setEnabled(true);
-
         QString configId = confData.getConfigurationId();
         displayConfigurationId(configId);
 
         chargeCompleteCurrent = confData.getCompletedCurrent();
+        chargeCompleteCurrent /= 1000.0;
         minAppliedVoltage = confData.getMinAppliedVolts();
+        minAppliedVoltage /= 1000.0;
+
+        setCurrentState(eINIT_PORT_OPENED);
     }
 }
 
@@ -121,13 +197,12 @@ void MainWindow::startClicked(bool checked)
 
     int maxChargePeriod = confData.getMaxChargePeriod() / 1000;
 
-    ui->start->setEnabled(false);
-
     endTime = QDateTime::currentDateTime();
     endTime = endTime.addSecs(maxChargePeriod);
 
-    qreal   current = confData.getMaxChargeCurrent();
+    qreal   current = confData.getMaxConstantCurrent();
     current /= 1000.0;
+    setCurrentState(eCHARGE_STARTED);
     emit psuSetOutputCurrent(current);
 }
 
@@ -175,6 +250,7 @@ void MainWindow::resultOpenPort(QString error)
     }
     else
     {
+        setCurrentState(eSERIAL_PORT_OPENED);
         emit psuGetIdentification();
     }
 }
@@ -233,6 +309,7 @@ void MainWindow::resultGetActualOutputCurrent(qreal current, QString error)
     if (error != "")
     {
         stopCharging(error);
+        displayErrorDialog(error);
     }
     else
     {
@@ -241,7 +318,12 @@ void MainWindow::resultGetActualOutputCurrent(qreal current, QString error)
             QString reason("Charging complete");
             stopCharging(reason);
         }
-        // else do nothing
+        else
+        {
+            lastCurrent = current;
+            // Update actual current LCD display
+            // Update chart
+        }
     }
 }
 
@@ -250,6 +332,7 @@ void MainWindow::resultGetActualOutputVoltage(qreal voltage, QString error)
     if (error != "")
     {
         stopCharging(error);
+        displayErrorDialog(error);
     }
     else
     {
@@ -260,6 +343,9 @@ void MainWindow::resultGetActualOutputVoltage(qreal voltage, QString error)
         }
         else
         {
+            lastVoltage = voltage;
+            // Update actual voltage LCD display
+            // Chart update AFTER actual current is obtained
             emit psuGetActualOutputCurrent();
         }
     }
@@ -284,7 +370,8 @@ void MainWindow::resultGetIdentification(QString identification, QString error)
     }
     else
     {
-        ui->psuIdentifier->setText(identification);
+        displayPsuId(identification);
+        setCurrentState(eCHARGE_NOT_STARTED);
     }
 }
 
@@ -344,9 +431,15 @@ void MainWindow::makeConnections()
 {
     connect(ui->selectIniFile, SIGNAL(clicked(bool)), this, SLOT(selectIniFileClicked(bool)));
     connect(ui->openIniFile, SIGNAL(clicked(bool)), this, SLOT(openIniFileClicked(bool)));
+    connect(ui->openSerialPort, SIGNAL(clicked(bool)), this, SLOT(openSerialPortClicked(bool)));
+    connect(ui->start, SIGNAL(clicked(bool)), this, SLOT(startClicked(bool)));
+    connect(ui->pause, SIGNAL(clicked(bool)), this, SLOT(pauseClicked(bool)));
+    connect(ui->stop, SIGNAL(clicked(bool)), this, SLOT(stopClicked(bool)));
+    connect(ui->quit, SIGNAL(clicked(bool)), this, SLOT(quitClicked(bool)));
 
     connect(this, SIGNAL(psuOpenPort(QString)), &psuThread, SLOT(psuOpenPort(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuClosePort()), &psuThread, SLOT(psuClosePort()), Qt::QueuedConnection);
+    connect(this, SIGNAL(psuGetIdentification()), &psuThread, SLOT(psuGetIdentification()), Qt::QueuedConnection);
     connect(this, SIGNAL(psuSetOutputEnable(bool)), &psuThread, SLOT(psuSetOutputEnable(bool)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuSetOutputCurrent(qreal)), &psuThread, SLOT(psuSetOutputCurrent(qreal)), Qt::QueuedConnection);
     connect(this, SIGNAL(psuSetOutputVoltage(qreal)), &psuThread, SLOT(psuSetOutputVoltage(qreal)), Qt::QueuedConnection);
@@ -355,6 +448,7 @@ void MainWindow::makeConnections()
 
     connect(&psuThread, SIGNAL(resultOpenPort(QString)), this, SLOT(resultOpenPort(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultClosePort(QString)), this, SLOT(resultClosePort(QString)), Qt::QueuedConnection);
+    connect(&psuThread, SIGNAL(resultGetIdentification(QString,QString)), this, SLOT(resultGetIdentification(QString,QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultSetOutputEnable(QString)), this, SLOT(resultSetOutputEnable(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultSetOutputCurrent(QString)), this, SLOT(resultSetOutputCurrent(QString)), Qt::QueuedConnection);
     connect(&psuThread, SIGNAL(resultSetOutputVoltage(QString)), this, SLOT(resultSetOutputVoltage(QString)), Qt::QueuedConnection);

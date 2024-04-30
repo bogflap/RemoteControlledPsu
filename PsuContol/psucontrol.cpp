@@ -158,14 +158,14 @@ bool PsuContol::readCurrent(qreal &current)
     Q_UNUSED(current);
     bool    result = true;
 
-    lastError = "Not implemented";
+    lastError = "readCurrent Not Implemented";
 
     return result;
 }
 
 bool PsuContol::setCurrent(qreal mCurrent)
 {
-    bool    result = true;
+    bool    result = false;
 
     if ((mCurrent * 1000.0) > psuParams->getMaxCurrentMa())
     {
@@ -461,7 +461,7 @@ bool PsuContol::setOverVoltageProtection(bool &enable)
 
     waitForMilliSeconds(INTER_COMMAND_DELAY);
 
-    lastError = "Not implemented";
+    lastError = "setOverVoltageProtection Not Implemented";
 
     return result;
 }
@@ -473,7 +473,7 @@ bool PsuContol::setBeep(bool &enable)
 
     waitForMilliSeconds(INTER_COMMAND_DELAY);
 
-    lastError = "Not implemented";
+    lastError = "setBeep Not Implemented";
 
     return result;
 }
@@ -503,7 +503,7 @@ bool PsuContol::setPanelLock(bool &enable)
 
     waitForMilliSeconds(INTER_COMMAND_DELAY);
 
-    lastError = "Not implemented";
+    lastError = "setPanelLock Not Implemented";
 
     return result;
 }
@@ -515,7 +515,7 @@ bool PsuContol::saveConfiguration(int number)
 
     waitForMilliSeconds(INTER_COMMAND_DELAY);
 
-    lastError = "Not implemented";
+    lastError = "saveConfiguration Not Implemented";
 
     return result;
 }
@@ -527,7 +527,7 @@ bool PsuContol::recallConfiguration(int number)
 
     waitForMilliSeconds(INTER_COMMAND_DELAY);
 
-    lastError = "Not implemented";
+    lastError = "recallConfiguration Not Implemented";
 
     return result;
 }

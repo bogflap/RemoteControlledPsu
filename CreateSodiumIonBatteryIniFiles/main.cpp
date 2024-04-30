@@ -135,12 +135,12 @@ void CreateTestFile()
     int   mcp = 1000000;
     int   up = 1000;
     WriteTimingsSection(oTs, mcp, up);
-    int maxAp = 4100;
+    int maxAp = 12000;
     int minAp = 1500;
     WriteVoltagesSection(oTs, maxAp, minAp);
-    int maxConstC = 750;
+    int maxConstC = 200;
     int maxChargC = 1000;
-    int completeC = 75;
+    int completeC = 118;
     WriteCurrentsSection(oTs, maxConstC, maxChargC, completeC);
     int vi = 12;
     WriteIncrementsSection(oTs, vi);

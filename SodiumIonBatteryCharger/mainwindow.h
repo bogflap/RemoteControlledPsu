@@ -77,11 +77,29 @@ private slots:
     void    quitClicked(bool checked);
     void    timerExpired();
 
+// GUI state variables
+private:
+    bool                quitting;
+    enum    eChargingState
+    {
+        eNO_STATE,
+        eINIT_PORT_OPENED,
+        eSERIAL_PORT_OPENED,
+        eCHARGE_NOT_STARTED,
+        eCHARGE_STARTED,
+        eCHARGE_PAUSED,
+        eCHARGE_STOPPING
+    };
+
+    eChargingState      currentState;
+
 private:
     void    makeConnections();
     void    getSerialPorts();
+    void    setCurrentState(eChargingState newState);
     void    displayErrorDialog(QString &error);
     void    displayConfigurationId(QString &cId);
+    void    displayPsuId(QString &pId);
     void    stopCharging(QString &reason);
 
 private:
@@ -92,8 +110,9 @@ private:
     QString             confFilePath;
     QTimer              timer;
     QDateTime           endTime;
-    int                 chargeCompleteCurrent;
-    int                 minAppliedVoltage;
-    bool                quitting;
+    qreal               lastVoltage;
+    qreal               lastCurrent;
+    qreal               chargeCompleteCurrent;
+    qreal               minAppliedVoltage;
 };
 #endif // MAINWINDOW_H

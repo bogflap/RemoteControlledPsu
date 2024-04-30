@@ -62,7 +62,7 @@ void PsuThread::psuSetOutputCurrent(qreal current)
 {
     QString error("");
 
-    if (gPsuControl.setCurrent(current))
+    if (!gPsuControl.setCurrent(current))
     {
         gPsuControl.getError(error);
     }
@@ -140,9 +140,12 @@ void PsuThread::psuGetActualOutputVoltage()
 
 void PsuThread::psuSetOutputEnable(bool enable)
 {
-    Q_UNUSED(enable);
+    QString error("");
 
-    QString error("Not implemented");
+    if (!gPsuControl.setChannelOutput(enable))
+    {
+        gPsuControl.getError(error);
+    }
 
     emit resultSetOutputEnable(error);
 }
@@ -179,7 +182,7 @@ void PsuThread::psuRecallPanelSetting(int number)
 {
     Q_UNUSED(number);
 
-    QString error("Not implemented");
+    QString error("PsuThread::psuRecallPanelSetting Not Implemented");
 
     emit resultRecallPanelSetting(number, error);
 }
@@ -188,7 +191,7 @@ void PsuThread::psuSavePanelSetting(int number)
 {
     Q_UNUSED(number);
 
-    QString error("Not implemented");
+    QString error("PsuThread::psuSavePanelSetting Not Implemented");
 
     emit resultSavePanelSetting(error);
 }
@@ -209,7 +212,7 @@ void PsuThread::psuSetKeyboardLock(bool enable)
 {
     Q_UNUSED(enable);
 
-    QString error("Not implemented");
+    QString error("PsuThread::psuSetKeyboardLock Not Implemented");
 
     emit resultSetKeyboardLock(error);
 }

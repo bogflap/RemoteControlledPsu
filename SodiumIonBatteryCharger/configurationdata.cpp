@@ -127,6 +127,11 @@ bool ConfigurationData::getIntValue(QString group, QString key, int &value)
     return result;
 }
 
+int ConfigurationData::getMaxConstantCurrent() const
+{
+    return maxConstantCurrent;
+}
+
 QString ConfigurationData::getConfigurationId() const
 {
     return configurationId;

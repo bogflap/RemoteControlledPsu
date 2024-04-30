@@ -28,6 +28,8 @@ public:
 
     QString getConfigurationId() const;
 
+    int getMaxConstantCurrent() const;
+
 private:
     bool        getIntValue(QString group, QString key, int& value);
 
