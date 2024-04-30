@@ -87,8 +87,7 @@ private:
         eSERIAL_PORT_OPENED,
         eCHARGE_NOT_STARTED,
         eCHARGE_STARTED,
-        eCHARGE_PAUSED,
-        eCHARGE_STOPPING
+        eCHARGE_PAUSED
     };
 
     eChargingState      currentState;
@@ -100,7 +99,15 @@ private:
     void    displayErrorDialog(QString &error);
     void    displayConfigurationId(QString &cId);
     void    displayPsuId(QString &pId);
+    void    displayActualCurrent(qreal current);
+    void    displayActualVoltage(qreal voltage);
     void    stopCharging(QString &reason);
+    void    floatToDigits(  qreal value,
+                            int &tens,
+                            int &ones,
+                            int &tenths,
+                            int &hundreths,
+                            int &thousandths);
 
 private:
     Ui::MainWindow *ui;

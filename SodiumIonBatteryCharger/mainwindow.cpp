@@ -129,6 +129,40 @@ void MainWindow::displayPsuId(QString &pId)
     ui->psuIdentifier->setText(preAmble);
 }
 
+void MainWindow::displayActualCurrent(qreal current)
+{
+    int tens;
+    int ones;
+    int tenths;
+    int hundreths;
+    int thousandths;
+
+    floatToDigits(current, tens, ones, tenths, hundreths, thousandths);
+
+    ui->actualAmpsTens->display(tens);
+    ui->actualAmpsOnes->display(ones);
+    ui->actualAmpsTenths->display(tenths);
+    ui->actualAmpsHundreths->display(hundreths);
+    ui->actualAmpsThousandths->display(thousandths);
+}
+
+void MainWindow::displayActualVoltage(qreal voltage)
+{
+    int tens;
+    int ones;
+    int tenths;
+    int hundreths;
+    int thousandths;
+
+    floatToDigits(voltage, tens, ones, tenths, hundreths, thousandths);
+
+    ui->actualVoltsTens->display(tens);
+    ui->actualVoltsOnes->display(ones);
+    ui->actualVoltsTenths->display(tenths);
+    ui->actualVoltsHundreths->display(hundreths);
+    ui->actualVoltsThousandths->display(thousandths);
+}
+
 void MainWindow::stopCharging(QString &reason)
 {
     emit psuSetOutputEnable(false);
@@ -136,6 +170,44 @@ void MainWindow::stopCharging(QString &reason)
     timer.stop();
     displayErrorDialog(reason);
     setCurrentState(eCHARGE_NOT_STARTED);
+}
+
+void MainWindow::floatToDigits(qreal value, int &tens, int &ones, int &tenths, int &hundreths, int &thousandths)
+{
+    QString     fValue;
+    QByteArray  ba;
+    qsizetype   st;
+
+    QTextStream ts(&fValue);
+
+    ts.setFieldWidth(6);
+    ts.setPadChar('0');
+    ts.setRealNumberPrecision(3);
+    ts.setRealNumberNotation(QTextStream::FixedNotation);
+    ts.setFieldAlignment(QTextStream::AlignCenter);
+
+    ts << value;
+
+    ba = fValue.toLocal8Bit();
+
+    st = ba.indexOf(".");
+
+    if (st == 1)
+    {
+        tens = 0;
+        ones = ba[0] - 0x30;
+        tenths = ba[2] - 0x30;
+        hundreths = ba[3] - 0x30;
+        thousandths = ba[4] - 0x30;
+    }
+    else
+    {
+        tens = ba[0] - 0x30;
+        ones = ba[1] - 0x30;
+        tenths = ba[3] - 0x30;
+        hundreths = ba[4] - 0x30;
+        thousandths = ba[5] - 0x30;
+    }
 }
 
 MainWindow::~MainWindow()
@@ -322,7 +394,7 @@ void MainWindow::resultGetActualOutputCurrent(qreal current, QString error)
         {
             lastCurrent = current;
             // Update actual current LCD display
-            // Update chart
+            displayActualCurrent(current);
         }
     }
 }
@@ -345,6 +417,7 @@ void MainWindow::resultGetActualOutputVoltage(qreal voltage, QString error)
         {
             lastVoltage = voltage;
             // Update actual voltage LCD display
+            displayActualVoltage(voltage);
             // Chart update AFTER actual current is obtained
             emit psuGetActualOutputCurrent();
         }
@@ -394,9 +467,7 @@ void MainWindow::resultSetOutputEnable(QString error)
     }
     else
     {
-        ui->pause->setEnabled(true);
-        ui->stop->setEnabled(true);
-
+        setCurrentState(eCHARGE_STARTED);
         qreal updatePeriod = confData.getUpdatePeriod();
         timer.start(updatePeriod);
     }
