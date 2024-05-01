@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     makeConnections();
     getSerialPorts();
+    avpInitialise();
 }
 
 void MainWindow::getSerialPorts()
@@ -212,6 +213,84 @@ void MainWindow::floatToDigits(qreal value, int &tens, int &ones, int &tenths, i
     }
 }
 
+void MainWindow::avpInitialise()
+{
+    // Cut down on the typing and make code more readable
+    QCustomPlot *plot = ui->ampsVoltsPlot;
+
+    // Graph zero (0) in blue will be amps display
+    QPen        ampsColour(Qt::blue);
+
+    // Graph one (1) in red will be the volts display
+    QPen        voltsColour(Qt::red);
+
+    // Use default key/value axis layout
+    plot->addGraph();
+    plot->graph(0)->setPen(ampsColour);
+    plot->graph(0)->setName("Amps");
+
+    // Key axis bottom, value axis right
+    plot->addGraph(plot->xAxis, plot->yAxis2);
+    plot->graph(1)->setPen(voltsColour);
+    plot->graph(1)->setName("Volts");
+
+    // Assume left axis shows current values
+    // Assume right axis shows voltage values
+    plot->yAxis2->setVisible(true);
+    plot->yAxis2->setTickLabels(true);
+
+    // Set user interactions
+    // Allow user to drag axis ranges with mouse and zoom with mouse wheel
+    plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+}
+
+void MainWindow::avpConfigure()
+{
+    // Cut down on the typing and make code more readable
+    QCustomPlot *plot = ui->ampsVoltsPlot;
+
+    // Graph zero (0) will be amps display
+    qreal       minAmpsRange = 0.0;
+    qreal       maxAmpsRange = confData.getMaxChargeCurrent();
+    maxAmpsRange /=1000.0;
+    QCPRange    ampsRange(minAmpsRange, maxAmpsRange);
+
+    // Graph one (1) will be volts display
+    qreal       minVoltsRange = 0.0;
+    qreal       maxVoltsRange = confData.getMaxAppliedVolts();
+    maxVoltsRange /=1000.0;
+    QCPRange    voltsRange(minVoltsRange, maxVoltsRange);
+
+    plot->yAxis->setRange(ampsRange);
+    plot->yAxis2->setRange(voltsRange);
+
+    plot->replot();
+}
+
+void MainWindow::avpAddData(qreal &time, qreal &current, qreal &voltage)
+{
+    // Cut down on the typing and make code more readable
+    QCustomPlot *plot = ui->ampsVoltsPlot;
+
+    // Graph zero (0) is the amps display
+    plot->graph(0)->addData(time, current);
+    plot->graph(0)->rescaleAxes();
+
+    // Graph one (1) is the volts display
+    plot->graph(1)->addData(time, voltage);
+    plot->graph(1)->rescaleAxes();
+
+    plot->replot();
+}
+
+void MainWindow::avpClearData()
+{
+    ui->ampsVoltsPlot->graph(0)->data()->clear();
+    ui->ampsVoltsPlot->graph(1)->data()->clear();
+
+    ui->ampsVoltsPlot->replot();
+}
+
 MainWindow::~MainWindow()
 {
     tPsuThread.quit();
@@ -252,6 +331,7 @@ void MainWindow::openIniFileClicked(bool checked)
         minAppliedVoltage /= 1000.0;
 
         setCurrentState(eINIT_PORT_OPENED);
+        avpConfigure();
     }
 }
 
@@ -271,12 +351,14 @@ void MainWindow::startClicked(bool checked)
 
     int maxChargePeriod = confData.getMaxChargePeriod() / 1000;
 
+    startTime = QDateTime::currentDateTime();
     endTime = QDateTime::currentDateTime();
     endTime = endTime.addSecs(maxChargePeriod);
 
     qreal   current = confData.getMaxConstantCurrent();
     current /= 1000.0;
     setCurrentState(eCHARGE_STARTED);
+
     emit psuSetOutputCurrent(current);
 }
 
@@ -395,8 +477,14 @@ void MainWindow::resultGetActualOutputCurrent(qreal current, QString error)
         else
         {
             lastCurrent = current;
+
             // Update actual current LCD display
             displayActualCurrent(current);
+
+            // Add data to the amps and volts plot
+            qreal   elapsedTime;
+            elapsedTime = startTime.secsTo(QDateTime::currentDateTime());
+            avpAddData(elapsedTime, lastCurrent, lastVoltage);
         }
     }
 }

@@ -1,7 +1,7 @@
 QT += core gui charts
 QT += serialport
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++17
 
@@ -15,7 +15,8 @@ SOURCES += \
     ../PsuContol/psucontrol.cpp \
     configurationdata.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    qcustomplot.cpp
 
 HEADERS += \
     ../PsuContol/Params_72_2710.h \
@@ -23,7 +24,8 @@ HEADERS += \
     ../PsuContol/psuThread.h \
     ../PsuContol/psucontrol.h \
     configurationdata.h \
-    mainwindow.h
+    mainwindow.h \
+    qcustomplot.h
 
 FORMS += \
     mainwindow.ui

@@ -93,6 +93,7 @@ private:
 
     eChargingState      currentState;
 
+    // Utility functions
 private:
     void    makeConnections();
     void    getSerialPorts();
@@ -109,6 +110,10 @@ private:
                             int &tenths,
                             int &hundreths,
                             int &thousandths);
+    void    avpInitialise();
+    void    avpConfigure();
+    void    avpAddData(qreal &time, qreal &current, qreal &voltage);
+    void    avpClearData();
 
 private:
     Ui::MainWindow *ui;
@@ -118,6 +123,7 @@ private:
     QString             confFilePath;
     QTimer              timer;
     QDateTime           endTime;
+    QDateTime           startTime;
     qreal               lastVoltage;
     qreal               lastCurrent;
     qreal               chargeCompleteCurrent;
