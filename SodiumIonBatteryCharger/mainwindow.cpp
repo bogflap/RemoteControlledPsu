@@ -114,12 +114,29 @@ void MainWindow::displayErrorDialog(QString &error)
     QMessageBox::information(this, title, error);
 }
 
-void MainWindow::displayConfigurationId(QString &cId)
+void MainWindow::displayConfiguration()
 {
-    QString preAmble("Configuration Id: ");
+    QString cIdreAmble("Configuration Id: ");
+    QString configId = confData.getConfigurationId();
+    QString ccPreamble("CC Mode: ");
+    QString cc = QString::number(confData.getMaxConstantCurrent());
+    QString cvPreamble("CV Mode: ");
+    QString cv = QString::number(confData.getMaxAppliedVolts());
+    QString compPreamble("Complete: ");
+    QString comp = QString::number(confData.getCompletedCurrent());
 
-    preAmble.append(cId);
-    ui->iniIdentifier->setText(preAmble);
+    cIdreAmble.append(configId);
+    ccPreamble.append(cc);
+    ccPreamble.append("mA");
+    cvPreamble.append(cv);
+    cvPreamble.append("mV");
+    compPreamble.append(comp);
+    compPreamble.append("mA");
+
+    ui->iniIdentifier->setText(cIdreAmble);
+    ui->constantCurrent->setText(ccPreamble);
+    ui->constantVoltage->setText(cvPreamble);
+    ui->completeCurrent->setText(compPreamble);
 }
 
 void MainWindow::displayPsuId(QString &pId)
@@ -322,8 +339,7 @@ void MainWindow::openIniFileClicked(bool checked)
     }
     else
     {
-        QString configId = confData.getConfigurationId();
-        displayConfigurationId(configId);
+        displayConfiguration();
 
         chargeCompleteCurrent = confData.getCompletedCurrent();
         chargeCompleteCurrent /= 1000.0;

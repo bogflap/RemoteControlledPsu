@@ -87,6 +87,27 @@
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="constantCurrent">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="constantVoltage">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="completeCurrent">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="psuIdentifier">
           <property name="text">
            <string/>

@@ -92,7 +92,7 @@ void SodiumIon_4S_18650_1500mA_File()
     oTs << ";" <<  Qt::endl;
     oTs << Qt::endl;
 
-    QString id("HakadiSodiumIon_18650_1500mA");
+    QString id("Hakadi_SodiumIon_4S_18650_1500mA");
     WriteIdentificationSection(oTs, id);
     int   mcp = 48000000;
     int   up = 1000;
@@ -132,7 +132,7 @@ void SodiumIon_1S_18650_1500mA_File()
     oTs << ";" <<  Qt::endl;
     oTs << Qt::endl;
 
-    QString id("HakadiSodiumIon_18650_1500mA");
+    QString id("Hakadi_SodiumIon_1S_18650_1500mA");
     WriteIdentificationSection(oTs, id);
     int   mcp = 48000000;
     int   up = 1000;

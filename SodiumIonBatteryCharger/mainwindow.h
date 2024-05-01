@@ -99,7 +99,7 @@ private:
     void    getSerialPorts();
     void    setCurrentState(eChargingState newState);
     void    displayErrorDialog(QString &error);
-    void    displayConfigurationId(QString &cId);
+    void    displayConfiguration();
     void    displayPsuId(QString &pId);
     void    displayActualCurrent(qreal current);
     void    displayActualVoltage(qreal voltage);
