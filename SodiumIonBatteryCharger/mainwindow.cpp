@@ -241,7 +241,7 @@ void MainWindow::avpInitialise()
 
     // Set user interactions
     // Allow user to drag axis ranges with mouse and zoom with mouse wheel
-    plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    // plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 }
 
 void MainWindow::avpConfigure()

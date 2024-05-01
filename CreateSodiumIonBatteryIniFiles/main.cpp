@@ -72,10 +72,10 @@ void WriteIncrementsSection(QTextStream &oTs, int &vi)
     oTs << "VoltsIncrement=" << vi << Qt::endl;
 }
 
-void CreateHakadiFile()
+void SodiumIon_4S_18650_1500mA_File()
 {
     QFile   oFile;
-    QString filePath(BaseFilePath + "SodiumIon_18650_1500mA.ini");
+    QString filePath(BaseFilePath + "SodiumIon_4S_18650_1500mA.ini");
 
     oFile.setFileName(filePath);
     oFile.open(QIODeviceBase::WriteOnly);
@@ -84,7 +84,48 @@ void CreateHakadiFile()
 
     // Write out file specific header details
     oTs << ";"    <<  Qt::endl;
-    oTs << "; Configuration file the Hakadi 18650 1500mA Sodium Ion battery" <<  Qt::endl;
+    oTs << "; Configuration file for a four cell Hakadi 18650 1500mA" << Qt::endl;
+    oTs << "; Sodium Ion battery configured as 4S" <<  Qt::endl;
+    oTs << "; Spec says maximum charge voltage is 4.1V x 4 = 16.4V" << Qt::endl;
+    oTs << "; maximum charge current is 0.5C" << Qt::endl;
+    oTs << "; charge complete current = 0.05C" <<  Qt::endl;
+    oTs << ";" <<  Qt::endl;
+    oTs << Qt::endl;
+
+    QString id("HakadiSodiumIon_18650_1500mA");
+    WriteIdentificationSection(oTs, id);
+    int   mcp = 48000000;
+    int   up = 1000;
+    WriteTimingsSection(oTs, mcp, up);
+    int maxAp = 16400;
+    int minAp = 1500;
+    WriteVoltagesSection(oTs, maxAp, minAp);
+    int maxConstC = 750;
+    int maxChargC = 1000;
+    int completeC = 75;
+    WriteCurrentsSection(oTs, maxConstC, maxChargC, completeC);
+    int vi = 12;
+    WriteIncrementsSection(oTs, vi);
+    oTs << Qt::endl;
+
+    oTs.flush();
+    oFile.close();
+}
+
+void SodiumIon_1S_18650_1500mA_File()
+{
+    QFile   oFile;
+    QString filePath(BaseFilePath + "SodiumIon_1S_18650_1500mA.ini");
+
+    oFile.setFileName(filePath);
+    oFile.open(QIODeviceBase::WriteOnly);
+
+    QTextStream oTs(&oFile);
+
+    // Write out file specific header details
+    oTs << ";"    <<  Qt::endl;
+    oTs << "; Configuration file for a single cell Hakadi 18650 1500mA" << Qt::endl;
+    oTs << "; Sodium Ion battery configured as 1S" <<  Qt::endl;
     oTs << "; Spec says maximum charge voltage is 4.1V" << Qt::endl;
     oTs << "; maximum charge current is 0.5C" << Qt::endl;
     oTs << "; charge complete current = 0.05C" <<  Qt::endl;
@@ -93,7 +134,7 @@ void CreateHakadiFile()
 
     QString id("HakadiSodiumIon_18650_1500mA");
     WriteIdentificationSection(oTs, id);
-    int   mcp = 1000000;
+    int   mcp = 48000000;
     int   up = 1000;
     WriteTimingsSection(oTs, mcp, up);
     int maxAp = 4100;
@@ -154,7 +195,8 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    CreateHakadiFile();
+    SodiumIon_1S_18650_1500mA_File();
+    SodiumIon_4S_18650_1500mA_File();
     CreateTestFile();
 
     return 0;
