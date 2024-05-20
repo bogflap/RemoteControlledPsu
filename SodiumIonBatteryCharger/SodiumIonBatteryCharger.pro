@@ -41,3 +41,5 @@ DISTFILES += \
 
 INCLUDEPATH += $$PWD/../PsuContol
 DEPENDPATH += $$PWD/../PsuContol
+
+STATECHARTS +=
